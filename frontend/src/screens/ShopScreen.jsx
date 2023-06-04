@@ -25,21 +25,49 @@ const ShopScreen = () => {
   const [data, setData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
-  const response = useFiltersAppiliedQuery({
-    filters,
-    pageNumber,
-  });
-  console.log(response);
+  // let response;
+  // if (isFilterApplied) {
+  //   response = useFiltersAppiliedQuery({
+  //     filters,
+  //     pageNumber,
+  //   });
+  // }
+  // console.log(response);
 
-  useEffect(() => {
-    if (isFilterApplied) {
+  // useEffect(() => {
+  //   if (isFilterApplied) {
+  //     const response = useFiltersAppiliedQuery({
+  //       filters,
+  //       pageNumber,
+  //     });
+  //     setData(response.data);
+  //     setIsLoading(false);
+  //     setError(response.error);
+  //     setIsFilterApplied(false);
+  //   }
+  // }, [isFilterApplied]);
+
+  const fetchData = async () => {
+    try {
+      const response = await useFiltersAppiliedQuery({
+        filters,
+        pageNumber,
+      });
       setData(response.data);
       setIsLoading(false);
       setError(response.error);
       setIsFilterApplied(false);
+    } catch (error) {
+      setError(error);
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (isFilterApplied) {
+      fetchData();
     }
   }, [isFilterApplied]);
-
   const [isOpen, setIsOpen] = useState(false);
   const toggleDrawer = () => {
     setIsOpen(!isOpen);
