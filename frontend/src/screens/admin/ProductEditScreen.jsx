@@ -9,6 +9,7 @@ import {
   useGetProductDetailsQuery,
   useUpdateProductMutation,
   useUploadProductImageMutation,
+  useUploadProductImageOnCloudinaryMutation,
 } from "../../slices/productsApiSlice";
 
 const ProductEditScreen = () => {
@@ -34,8 +35,11 @@ const ProductEditScreen = () => {
   const [updateProduct, { isLoading: loadingUpdate }] =
     useUpdateProductMutation();
 
-  const [uploadProductImage, { isLoading: loadingUpload }] =
-    useUploadProductImageMutation();
+  // const [uploadProductImage, { isLoading: loadingUpload }] =
+  //   useUploadProductImageMutation();
+
+  const [uploadProductImageOnCloudinary, { isLoading: loadingUpload }] =
+    useUploadProductImageOnCloudinaryMutation();
 
   const navigate = useNavigate();
 
@@ -76,30 +80,33 @@ const ProductEditScreen = () => {
     }
   }, [product]);
 
-  const uploadFileHandler = async (e) => {
-    const formData = new FormData();
-    console.log(e.target.files[0]);
-    formData.append("image", e.target.files[0]);
-    console.log(formData);
-    try {
-      const res = await uploadProductImage(formData).unwrap();
-      toast.success(res.message);
-      setImage([...image, res.image]);
-    } catch (err) {
-      toast.error(err?.data?.message || err.error);
-    }
-  };
-
-  // const uploadImagesHandler = async (e) => {
-  //   const image = e.target.files[0];
+  // const uploadFileHandler = async (e) => {
+  //   const formData = new FormData();
+  //   console.log(e.target.files[0]);
+  //   formData.append("image", e.target.files[0]);
+  //   console.log(formData);
   //   try {
-  //     const res = await uploadProductImage(image).unwrap();
+  //     const res = await uploadProductImage(formData).unwrap();
   //     toast.success(res.message);
   //     setImage([...image, res.image]);
   //   } catch (err) {
   //     toast.error(err?.data?.message || err.error);
   //   }
   // };
+
+  const uploadImagesHandler = async (e) => {
+    const formData = new FormData();
+    console.log(e.target.files[0]);
+    formData.append("image", e.target.files[0]);
+    try {
+      const res = await uploadProductImageOnCloudinary(formData).unwrap();
+      console.log(res);
+      toast.success(res.message);
+      setImage([...image, res.image]);
+    } catch (err) {
+      toast.error(err?.data?.message || err.error);
+    }
+  };
 
   return (
     <>
@@ -137,13 +144,14 @@ const ProductEditScreen = () => {
               <Form.Label>Image</Form.Label>
               <Form.Control
                 type="text"
+                accept="images/*"
                 placeholder="Enter image url"
                 value={image}
                 onChange={(e) => setImage(e.target.value)}
               ></Form.Control>
               <Form.Control
                 label="Choose File"
-                onChange={uploadFileHandler}
+                onChange={uploadImagesHandler}
                 type="file"
               ></Form.Control>
               {loadingUpload && <Loader />}

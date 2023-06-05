@@ -74,7 +74,7 @@ const LoginScreen = () => {
       </Form>
 
       <div className="my-3">
-        <GoogleAuthButton />
+        <GoogleAuthButton buttonDisplay="Sign In with Google" />
       </div>
 
       <Row className="py-3">

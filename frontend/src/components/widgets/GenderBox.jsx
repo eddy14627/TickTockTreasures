@@ -5,18 +5,8 @@ import { setfilters } from "../../slices/filterSlice";
 
 const CheckboxGroup = () => {
   const dispatch = useDispatch();
-  const Gen = useSelector((state) => state.appliedFilters.gender);
-  const [selectedCheckboxes, setSelectedCheckboxes] = useState(
-    (Gen &&
-      Gen.map((gen) => {
-        if (gen === "male") return 1;
-        else if (gen === "female") return 2;
-        else if (gen === "unisex") return 3;
-        else return 4;
-      })) ||
-      []
-  );
-  const [selectedGender, setSelectedGender] = useState(Gen || []);
+  const appliedFilters = useSelector((state) => state.appliedFilters);
+  const [selectedCheckboxes, setSelectedCheckboxes] = useState([]);
   const options = [
     { id: 1, label: "male" },
     { id: 2, label: "female" },
@@ -24,23 +14,28 @@ const CheckboxGroup = () => {
     { id: 4, label: "clock" },
   ];
 
+  useEffect(() => {
+    const gender = appliedFilters.gender || [];
+    setSelectedCheckboxes(gender);
+  }, [appliedFilters.gender]);
+
   const handleCheckboxChange = (optionId) => {
     const isChecked = selectedCheckboxes.includes(optionId);
+    let updatedCheckboxes;
 
     if (isChecked) {
-      setSelectedGender(
-        selectedGender.filter((gen) => gen !== options[optionId - 1].label)
-      );
-      setSelectedCheckboxes(selectedCheckboxes.filter((id) => id !== optionId));
+      updatedCheckboxes = selectedCheckboxes.filter((id) => id !== optionId);
     } else {
-      setSelectedCheckboxes([...selectedCheckboxes, optionId]);
-      setSelectedGender([...selectedGender, options[optionId - 1].label]);
+      updatedCheckboxes = [...selectedCheckboxes, optionId];
     }
-  };
 
-  useEffect(() => {
+    setSelectedCheckboxes(updatedCheckboxes);
+    const selectedGender = options
+      .filter((option) => updatedCheckboxes.includes(option.id))
+      .map((option) => option.label);
+
     dispatch(setfilters({ gender: selectedGender }));
-  }, [selectedGender]);
+  };
 
   return (
     <div>

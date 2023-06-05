@@ -99,7 +99,7 @@ const RegisterScreen = () => {
             </Button>
           </Col>
           <Col>
-            <GoogleAuthButton />
+            <GoogleAuthButton buttonDisplay="Sign up with Google" />
           </Col>
         </Row>
 

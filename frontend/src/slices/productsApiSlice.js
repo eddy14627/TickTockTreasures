@@ -39,6 +39,16 @@ export const productsApiSlice = apiSlice.injectEndpoints({
         body: data,
       }),
     }),
+    uploadProductImageOnCloudinary: builder.mutation({
+      query: (data) => ({
+        url: `/api/upload/upload-cloudinary`,
+        method: "POST",
+        body: data,
+      }),
+      onQueryStarted: (data) => {
+        console.log(data);
+      },
+    }),
 
     deleteProduct: builder.mutation({
       query: (productId) => ({
@@ -68,6 +78,7 @@ export const {
   useCreateProductMutation,
   useUpdateProductMutation,
   useUploadProductImageMutation,
+  useUploadProductImageOnCloudinaryMutation,
   useDeleteProductMutation,
   useCreateReviewMutation,
   useGetTopProductsQuery,

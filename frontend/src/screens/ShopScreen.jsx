@@ -18,13 +18,13 @@ import { useSelector } from "react-redux";
 const ShopScreen = () => {
   const { pageNumber = 1, keyword = "" } = useParams();
   const [isFilterApplied, setIsFilterApplied] = useState(true);
-  const navigate = useNavigate();
-
-  const filters = useSelector((state) => state.appliedFilters);
-
   const [data, setData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  const navigate = useNavigate();
+  const filters = useSelector((state) => state.appliedFilters);
+
   const response = useFiltersAppiliedQuery({
     filters,
     pageNumber,
