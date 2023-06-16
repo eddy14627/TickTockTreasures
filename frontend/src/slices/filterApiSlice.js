@@ -56,12 +56,15 @@ export const filterApiSlice = apiSlice.injectEndpoints({
       keepUnusedDataFor: 5,
       providesTags: ["Filters"],
     }),
-    filtersAppilied: builder.query({
-      query: ({ selectedFilters, pageNumber }) => ({
+    filtersAppilied: builder.mutation({
+      query: ({ filters, pageNumber, keyword }) => ({
         url: `${FILTERS_URL}/filterApplied`,
-        prarms: { selectedFilters, pageNumber },
+        method: "POST",
+        params: { pageNumber, keyword },
+        body: filters,
       }),
-      keepUnusedDataFor: 5,
+      // keepUnusedDataFor: 5,
+      providesTags: ["Filters"],
     }),
   }),
 });
@@ -73,5 +76,5 @@ export const {
   useFilterByGenderMutation,
   useFilterByWatchTypeMutation,
   useFilterByPriceMutation,
-  useFiltersAppiliedQuery,
+  useFiltersAppiliedMutation,
 } = filterApiSlice;

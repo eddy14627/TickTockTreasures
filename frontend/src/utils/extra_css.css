@@ -1,0 +1,26 @@
+.product-image-container {
+  display: flex;
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+  width: 355px;
+  height: 355px;
+  overflow: hidden;
+}
+
+.product-image {
+  width: auto;
+  height: 100%;
+  object-fit: cover;
+}
+
+.product-title {
+  margin-bottom: 0.5rem;
+}
+
+.product-rating {
+  margin-bottom: 0.5rem;
+}
+
+.product-price {
+  margin-bottom: 0;
+}

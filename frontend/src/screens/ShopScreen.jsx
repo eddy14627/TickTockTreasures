@@ -12,7 +12,7 @@ import Loader from "../components/Loader";
 import Message from "../components/widgets/Message";
 import Paginate from "../components/Paginate";
 import Meta from "../components/Meta";
-import { useFiltersAppiliedQuery } from "../slices/filterApiSlice";
+import { useFiltersAppiliedMutation } from "../slices/filterApiSlice";
 import { useSelector } from "react-redux";
 
 const ShopScreen = () => {
@@ -24,20 +24,34 @@ const ShopScreen = () => {
 
   const navigate = useNavigate();
   const filters = useSelector((state) => state.appliedFilters);
-
-  const response = useFiltersAppiliedQuery({
-    filters,
-    pageNumber,
-  });
-  console.log(response);
+  console.log(filters);
+  // const [filtersAppilied, { isLoading: loadingUpdate }] =
+  //   useFiltersAppiliedMutation({
+  //     keyword,
+  //     pageNumber,
+  //   });
+  const [filtersAppilied, { isLoading: loadingUpdate }] =
+    useFiltersAppiliedMutation();
+  // setData(response.data);
+  // console.log(response);
+  const fetchData = async () => {
+    // const response = await filtersAppilied({ filters, keyword, pageNumber });
+    const response = await filtersAppilied({
+      filters: filters,
+      keyword: keyword,
+      pageNumber: pageNumber,
+    });
+    console.log(response);
+    setData(response.data);
+    console.log(response.data);
+    setIsLoading(false);
+    setError(response.error);
+    setIsFilterApplied(false);
+  };
 
   useEffect(() => {
-    if (isFilterApplied) {
-      setData(response.data);
-      setIsLoading(false);
-      setError(response.error);
-      setIsFilterApplied(false);
-    }
+    if (isFilterApplied) fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isFilterApplied]);
 
   const [isOpen, setIsOpen] = useState(false);
@@ -85,7 +99,13 @@ const ShopScreen = () => {
             <strong>Brands</strong>
             <BrandListBox />
           </Row>
-          <Button onClick={handelApplyFilter}>apply</Button>
+
+          <Row style={{ marginTop: "25px" }}>
+            <Button onClick={handelApplyFilter}>apply</Button>
+          </Row>
+          <Row style={{ marginTop: "25px" }}>
+            <Button onClick={handelApplyFilter}>Reset</Button>
+          </Row>
         </Offcanvas.Body>
       </Offcanvas>
       <>
@@ -98,15 +118,20 @@ const ShopScreen = () => {
         ) : (
           <>
             <Meta />
-            <Row>
-              {/* Adjust the rendering based on the actual structure of the data */}
-              {data &&
-                data.products.map((product) => (
+            {data && data.count > 0 ? (
+              <Row>
+                {/* Adjust the rendering based on the actual structure of the data */}
+
+                {data.products.map((product) => (
                   <Col key={product._id} sm={12} md={6} lg={4} xl={3}>
                     <Product product={product} />
                   </Col>
                 ))}
-            </Row>
+              </Row>
+            ) : (
+              <Message variant="info">No products found</Message>
+            )}
+
             <Paginate
               pages={data && data.pages}
               page={data && data.page}

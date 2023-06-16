@@ -9,7 +9,6 @@ import {
   useGetProductDetailsQuery,
   useUpdateProductMutation,
   useUploadProductImageMutation,
-  useUploadProductImageOnCloudinaryMutation,
 } from "../../slices/productsApiSlice";
 
 const ProductEditScreen = () => {
@@ -17,7 +16,9 @@ const ProductEditScreen = () => {
 
   const [name, setName] = useState("");
   const [price, setPrice] = useState(0);
-  const [image, setImage] = useState("");
+  const [images, setImages] = useState([]);
+  const [profileImage, setProfileImage] = useState("");
+
   const [brand, setBrand] = useState("");
   const [gender, setGender] = useState("");
   const [isWearable, setIsWearable] = useState("");
@@ -35,11 +36,8 @@ const ProductEditScreen = () => {
   const [updateProduct, { isLoading: loadingUpdate }] =
     useUpdateProductMutation();
 
-  // const [uploadProductImage, { isLoading: loadingUpload }] =
-  //   useUploadProductImageMutation();
-
-  const [uploadProductImageOnCloudinary, { isLoading: loadingUpload }] =
-    useUploadProductImageOnCloudinaryMutation();
+  const [uploadProductImage, { isLoading: loadingUpload }] =
+    useUploadProductImageMutation();
 
   const navigate = useNavigate();
 
@@ -50,7 +48,8 @@ const ProductEditScreen = () => {
         productId,
         name,
         price,
-        image,
+        profileImage,
+        images,
         brand,
         gender,
         isWearable,
@@ -58,6 +57,7 @@ const ProductEditScreen = () => {
         description,
         countInStock,
       });
+
       toast.success("Product updated");
       refetch();
       navigate("/admin/productlist");
@@ -65,12 +65,12 @@ const ProductEditScreen = () => {
       toast.error(err?.data?.message || err.error);
     }
   };
-
   useEffect(() => {
     if (product) {
       setName(product.name);
       setPrice(product.price);
-      setImage(product.image);
+      setImages(product.images);
+      setProfileImage(product.profileImage);
       setBrand(product.brand);
       setGender(product.gender);
       setIsWearable(product.isWearable);
@@ -80,29 +80,36 @@ const ProductEditScreen = () => {
     }
   }, [product]);
 
-  // const uploadFileHandler = async (e) => {
-  //   const formData = new FormData();
-  //   console.log(e.target.files[0]);
-  //   formData.append("image", e.target.files[0]);
-  //   console.log(formData);
-  //   try {
-  //     const res = await uploadProductImage(formData).unwrap();
-  //     toast.success(res.message);
-  //     setImage([...image, res.image]);
-  //   } catch (err) {
-  //     toast.error(err?.data?.message || err.error);
-  //   }
-  // };
-
   const uploadImagesHandler = async (e) => {
     const formData = new FormData();
-    console.log(e.target.files[0]);
-    formData.append("image", e.target.files[0]);
+    const files = e.target.files;
+    console.log(files);
+    for (let i = 0; i < files.length; i++) {
+      formData.append("images", files[i]);
+    }
+    console.log(formData);
+
     try {
-      const res = await uploadProductImageOnCloudinary(formData).unwrap();
-      console.log(res);
+      const res = await uploadProductImage(formData).unwrap();
       toast.success(res.message);
-      setImage([...image, res.image]);
+      console.log(res);
+      setImages(res.images);
+    } catch (err) {
+      toast.error(err?.data?.message || err.error);
+    }
+  };
+
+  const uploadProfileImagesHandler = async (e) => {
+    const formData = new FormData();
+    const files = e.target.files;
+    for (let i = 0; i < files.length; i++) {
+      formData.append("images", files[i]);
+    }
+
+    try {
+      const res = await uploadProductImage(formData).unwrap();
+      toast.success(res.message);
+      setProfileImage(res.images[0]);
     } catch (err) {
       toast.error(err?.data?.message || err.error);
     }
@@ -141,19 +148,26 @@ const ProductEditScreen = () => {
               ></Form.Control>
             </Form.Group>
             <Form.Group controlId="image">
-              <Form.Label>Image</Form.Label>
+              <Form.Label>Images</Form.Label>
               <Form.Control
-                type="text"
-                accept="images/*"
-                placeholder="Enter image url"
-                value={image}
-                onChange={(e) => setImage(e.target.value)}
-              ></Form.Control>
-              <Form.Control
-                label="Choose File"
+                label="Choose Files"
                 onChange={uploadImagesHandler}
                 type="file"
-              ></Form.Control>
+                accept="image/*"
+                multiple
+              />
+
+              {loadingUpload && <Loader />}
+            </Form.Group>
+            <Form.Group controlId="profileImage">
+              <Form.Label>Profile Images</Form.Label>
+              <Form.Control
+                label="Choose Files"
+                onChange={uploadProfileImagesHandler}
+                type="file"
+                accept="image/*"
+                multiple
+              />
               {loadingUpload && <Loader />}
             </Form.Group>
             <Form.Group controlId="gender">

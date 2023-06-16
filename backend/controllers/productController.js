@@ -5,7 +5,9 @@ import Product from "../models/productModel.js";
 // @route   GET /api/products
 // @access  Public
 const getProducts = asyncHandler(async (req, res) => {
+  // console.log(req.query);
   const pageSize = process.env.PAGINATION_LIMIT;
+  // console.log(req.query.keyword);
   const page = Number(req.query.pageNumber) || 1;
 
   const keyword = req.query.keyword
@@ -16,9 +18,10 @@ const getProducts = asyncHandler(async (req, res) => {
         },
       }
     : {};
-
+  console.log(keyword);
   const count = await Product.countDocuments({ ...keyword });
   const products = await Product.find({ ...keyword })
+    .sort({ createdAt: -1 })
     .limit(pageSize)
     .skip(pageSize * (page - 1));
 
@@ -46,6 +49,7 @@ const createProduct = asyncHandler(async (req, res) => {
     price: 0,
     user: req.user._id,
     image: [],
+    profileImage: "",
     brand: "Sample brand",
     isWearable: "yes",
     gender: "male",
@@ -63,33 +67,40 @@ const createProduct = asyncHandler(async (req, res) => {
 // @route   PUT /api/products/:id
 // @access  Private/Admin
 const updateProduct = asyncHandler(async (req, res) => {
+  console.log("hellow");
   const {
     name,
     price,
     description,
-    image,
+    profileImage,
+    images,
     brand,
     isWearable,
     gender,
     watchType,
     countInStock,
   } = req.body;
+  console.log(req.body);
 
   const product = await Product.findById(req.params.id);
+  console.log("hellow 3");
 
   if (product) {
     product.name = name;
     product.price = price;
     product.description = description;
-    product.image = image;
+    product.profileImage = profileImage;
+    product.image = images;
     product.brand = brand;
     product.isWearable = isWearable;
     product.gender = gender;
     product.watchType = watchType;
     product.countInStock = countInStock;
 
+    console.log("hellow 4");
     const updatedProduct = await product.save();
-    console.log(updatedProduct);
+    console.log("hellow 45");
+    // console.log(updatedProduct);
     res.json(updatedProduct);
   } else {
     res.status(404);

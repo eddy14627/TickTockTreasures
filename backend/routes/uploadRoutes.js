@@ -1,6 +1,8 @@
 import path from "path";
 import express from "express";
 import multer from "multer";
+import { v4 as uuidv4 } from "uuid";
+
 const router = express.Router();
 
 // If production, use Render server's data folder, else use local uploads folder
@@ -12,10 +14,8 @@ const storage = multer.diskStorage({
     cb(null, uploadFolder);
   },
   filename(req, file, cb) {
-    cb(
-      null,
-      `${file.fieldname}-${Date.now()}${path.extname(file.originalname)}`
-    );
+    const uniqueFilename = `${uuidv4()}${path.extname(file.originalname)}`;
+    cb(null, uniqueFilename);
   },
 });
 
@@ -33,12 +33,17 @@ function checkFileType(file, cb) {
 
 const upload = multer({
   storage,
+  fileFilter: function (req, file, cb) {
+    checkFileType(file, cb);
+  },
 });
 
-router.post("/", upload.single("image"), (req, res) => {
+router.post("/", upload.array("images", 5), (req, res) => {
+  const imagePaths = req.files.map((file) => `/${file.path}`);
+  console.log(imagePaths);
   res.send({
-    message: "Image uploaded successfully",
-    image: `/${req.file.path}`,
+    message: "Images uploaded successfully",
+    images: imagePaths,
   });
 });
 

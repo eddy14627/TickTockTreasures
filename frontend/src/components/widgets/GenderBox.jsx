@@ -6,6 +6,7 @@ import { setfilters } from "../../slices/filterSlice";
 const CheckboxGroup = () => {
   const dispatch = useDispatch();
   const appliedFilters = useSelector((state) => state.appliedFilters);
+  // console.log(appliedFilters[0].gender);
   const [selectedCheckboxes, setSelectedCheckboxes] = useState([]);
   const options = [
     { id: 1, label: "male" },
@@ -15,9 +16,17 @@ const CheckboxGroup = () => {
   ];
 
   useEffect(() => {
-    const gender = appliedFilters.gender || [];
-    setSelectedCheckboxes(gender);
-  }, [appliedFilters.gender]);
+    const gender =
+      appliedFilters.find((obj) => obj.hasOwnProperty("gender"))?.gender || [];
+
+    const selectedGenderIds = gender.map((selectedLabel) => {
+      const option = options.find((opt) => opt.label === selectedLabel);
+      return option ? option.id : null;
+    });
+
+    setSelectedCheckboxes(selectedGenderIds);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleCheckboxChange = (optionId) => {
     const isChecked = selectedCheckboxes.includes(optionId);

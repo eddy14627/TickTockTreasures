@@ -92,15 +92,31 @@ const RegisterScreen = () => {
           ></Form.Control>
         </Form.Group>
 
-        <Row className="py-3">
+        <Row className="py-3 ">
           <Col>
-            <Button disabled={isLoading} type="submit" variant="primary">
+            <Button
+              disabled={isLoading}
+              type="submit"
+              variant="primary"
+              block
+              className="col-12"
+            >
               Register
             </Button>
           </Col>
-          <Col>
-            <GoogleAuthButton buttonDisplay="Sign up with Google" />
-          </Col>
+        </Row>
+        <Row className="py-3 justify-content-center">Or</Row>
+
+        <Row className="py-3 justify-content-center">
+          <GoogleAuthButton
+            buttonDisplay={
+              <div className="text-center">
+                <span className="d-block">Sign up with Google</span>
+              </div>
+            }
+            rounded
+            className="col-12"
+          />
         </Row>
 
         {isLoading && <Loader />}

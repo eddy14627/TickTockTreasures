@@ -66,16 +66,39 @@ const LoginScreen = () => {
           ></Form.Control>
         </Form.Group>
 
-        <Button disabled={isLoading} type="submit" variant="primary" block>
-          Sign In
-        </Button>
+        <Row className="py-3 ">
+          <Col>
+            <Button
+              disabled={isLoading}
+              type="submit"
+              variant="primary"
+              block
+              className="col-12"
+            >
+              Sign In
+            </Button>
+          </Col>
+        </Row>
 
         {isLoading && <Loader />}
       </Form>
+      <Row className="py-3">
+        <Link to={"/passwordChange"}>forget Password ?</Link>
+      </Row>
 
-      <div className="my-3">
-        <GoogleAuthButton buttonDisplay="Sign In with Google" />
-      </div>
+      <Row className="py-3 justify-content-center">Or</Row>
+
+      <Row className="py-3 justify-content-center">
+        <GoogleAuthButton
+          buttonDisplay={
+            <div className="text-center">
+              <span className="d-block">Sign In with Google</span>
+            </div>
+          }
+          rounded
+          className="col-12"
+        />
+      </Row>
 
       <Row className="py-3">
         <Col>

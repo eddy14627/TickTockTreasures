@@ -15,10 +15,10 @@ const ProductCarousel = () => {
           <Link to={`/product/${product._id}`}>
             <div
               className="d-flex align-items-center justify-content-center"
-              style={{ height: "30vh" }}
+              style={{ height: "50vh" }}
             >
               <Image
-                src={product.image}
+                src={product.profileImage}
                 alt={product.name}
                 fluid
                 style={{
@@ -30,7 +30,7 @@ const ProductCarousel = () => {
             </div>
             <Carousel.Caption className="carousel-caption">
               <h2 className="text-white text-right">
-                {product.name} (${product.price})
+                {product.name} (&#8377;{product.price})
               </h2>
             </Carousel.Caption>
           </Link>

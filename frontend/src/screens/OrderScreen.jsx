@@ -14,6 +14,7 @@ import {
 } from "../slices/ordersApiSlice";
 
 const OrderScreen = () => {
+  console.log("heoolo");
   const { id: orderId } = useParams();
 
   const {

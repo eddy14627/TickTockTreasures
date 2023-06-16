@@ -14,7 +14,7 @@ const filterSlice = createSlice({
   reducers: {
     setfilters: (state, action) => {
       const newFilter = action.payload;
-      console.log(action.payload);
+      // console.log(action.payload);
       const option = Object.keys(newFilter)[0];
 
       // Check if the appliedFilters array is empty

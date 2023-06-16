@@ -1,36 +1,51 @@
 import React, { useEffect, useState } from "react";
 import { Form } from "react-bootstrap";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setfilters } from "../../slices/filterSlice";
 
 const CheckboxGroup = () => {
   const dispatch = useDispatch();
-  const [selectedCheckboxes, setSelectedCheckboxes] = useState([]);
-  const [selectedWatchType, setSelectedWatchType] = useState([]);
+  const appliedFilters = useSelector((state) => state.appliedFilters);
 
+  const [selectedCheckboxes, setSelectedCheckboxes] = useState([]);
   const options = [
-    { id: 1, label: "smart" },
-    { id: 2, label: "casual" },
-    { id: 3, label: "luxuary" },
+    { id: 1, label: "lux" },
+    { id: 2, label: "smart" },
+    { id: 3, label: "casual" },
+    { id: 4, label: "sports" },
   ];
+
+  useEffect(() => {
+    const watchType =
+      appliedFilters.find((obj) => obj.hasOwnProperty("watchType"))
+        ?.watchType || [];
+
+    const selectedwatchTypeIds = watchType.map((selectedLabel) => {
+      const option = options.find((opt) => opt.label === selectedLabel);
+      return option ? option.id : null;
+    });
+
+    setSelectedCheckboxes(selectedwatchTypeIds);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleCheckboxChange = (optionId) => {
     const isChecked = selectedCheckboxes.includes(optionId);
+    let updatedCheckboxes;
 
     if (isChecked) {
-      setSelectedWatchType(
-        selectedWatchType.filter((wt) => wt !== options[optionId - 1].label)
-      );
-      setSelectedCheckboxes(selectedCheckboxes.filter((id) => id !== optionId));
+      updatedCheckboxes = selectedCheckboxes.filter((id) => id !== optionId);
     } else {
-      setSelectedCheckboxes([...selectedCheckboxes, optionId]);
-      setSelectedWatchType([...selectedWatchType, options[optionId - 1].label]);
+      updatedCheckboxes = [...selectedCheckboxes, optionId];
     }
-  };
 
-  useEffect(() => {
-    dispatch(setfilters({ watchType: selectedWatchType }));
-  }, [selectedWatchType]);
+    setSelectedCheckboxes(updatedCheckboxes);
+    const selectedwatchType = options
+      .filter((option) => updatedCheckboxes.includes(option.id))
+      .map((option) => option.label);
+
+    dispatch(setfilters({ watchType: selectedwatchType }));
+  };
 
   return (
     <div>

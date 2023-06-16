@@ -1,5 +1,5 @@
 import { apiSlice } from "./apiSlice";
-import { USERS_URL } from "../constants";
+import { USERS_URL, FORGET_PASSWORD_URL } from "../constants";
 
 export const userApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
@@ -71,6 +71,30 @@ export const userApiSlice = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ["User"],
     }),
+    sendOtp: builder.mutation({
+      query: (data) => ({
+        url: `${FORGET_PASSWORD_URL}/sendOtp`,
+        method: "POST",
+        body: data,
+      }),
+      invalidatesTags: ["User"],
+    }),
+    verifyOtp: builder.mutation({
+      query: (data) => ({
+        url: `${FORGET_PASSWORD_URL}/verifyOtp`,
+        method: "POST",
+        body: data,
+      }),
+      invalidatesTags: ["User"],
+    }),
+    changePassword: builder.mutation({
+      query: (data) => ({
+        url: `${FORGET_PASSWORD_URL}/changePassword`,
+        method: "POST",
+        body: data,
+      }),
+      invalidatesTags: ["User"],
+    }),
   }),
 });
 
@@ -85,4 +109,7 @@ export const {
   useDeleteUserMutation,
   useUpdateUserMutation,
   useGetUserDetailsQuery,
+  useSendOtpMutation,
+  useVerifyOtpMutation,
+  useChangePasswordMutation,
 } = userApiSlice;

@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { AiOutlineLeft, AiOutlineRight } from "react-icons/ai";
+import "../utils/extra_css.css";
 import {
   Row,
   Col,
@@ -94,29 +95,39 @@ const ProductScreen = () => {
         <>
           <Meta title={product.name} description={product.description} />
           <Row>
-            <Col md={6} className="position-relative">
-              <Image
-                src={product.image[currentImageIndex]}
-                alt={product.name}
-                fluid
-              />
-              {product.image.length > 1 && (
-                <div className="arrow-buttons d-flex mx-auto">
-                  <Button
-                    className="arrow-button left-arrow mx-auto"
-                    onClick={previousImage}
-                  >
-                    <AiOutlineLeft />
-                  </Button>
-                  <Button
-                    className="arrow-button right-arrow mx-auto"
-                    onClick={nextImage}
-                  >
-                    <AiOutlineRight />
-                  </Button>
-                </div>
-              )}
+            <Col
+              md={6}
+              className="position-relative d-flex justify-content-center"
+            >
+              <div>
+                {product.image.length > 1 && (
+                  <div className="arrow-buttons d-flex mx-auto">
+                    <button
+                      className="arrow-button left-arrow mx-auto border-0"
+                      onClick={previousImage}
+                      style={{ background: "none", height: "auto" }}
+                    >
+                      <AiOutlineLeft />
+                    </button>
+                    <div className="product-image-container">
+                      <Image
+                        src={product.image[currentImageIndex]}
+                        alt={product.name}
+                        className="product-image"
+                      />
+                    </div>
+                    <button
+                      className="arrow-button right-arrow mx-auto border-0"
+                      onClick={nextImage}
+                      style={{ background: "none", height: "auto" }}
+                    >
+                      <AiOutlineRight />
+                    </button>
+                  </div>
+                )}
+              </div>
             </Col>
+
             <Col md={3}>
               <ListGroup variant="flush">
                 <ListGroup.Item>
@@ -128,7 +139,7 @@ const ProductScreen = () => {
                     text={`${product.numReviews} reviews`}
                   />
                 </ListGroup.Item>
-                <ListGroup.Item>Price: ${product.price}</ListGroup.Item>
+                <ListGroup.Item>Price: &#8377;{product.price}</ListGroup.Item>
                 <ListGroup.Item>
                   Description: {product.description}
                 </ListGroup.Item>

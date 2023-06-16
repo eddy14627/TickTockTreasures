@@ -21,6 +21,7 @@ router.post("/googleRegister", registerUserWithGoogle);
 router.post("/auth", authUser);
 router.post("/auth/google", authUserWithGoogle);
 router.post("/logout", logoutUser);
+
 router
   .route("/profile")
   .get(protect, getUserProfile)
