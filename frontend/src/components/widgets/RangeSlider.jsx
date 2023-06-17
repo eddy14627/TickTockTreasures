@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Range } from "react-range";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setfilters } from "../../slices/filterSlice";
 
 const RangeSliderWithTwoPointers = () => {
   const [values, setValues] = useState([0, 40000]);
+  const appliedFilters = useSelector((state) => state.appliedFilters);
   const dispatch = useDispatch();
 
   const handleChange = (newValues) => {
@@ -12,17 +13,34 @@ const RangeSliderWithTwoPointers = () => {
     dispatch(setfilters({ price: newValues }));
   };
 
+  useEffect(() => {
+    dispatch(setfilters({ price: values }));
+  }, [values, dispatch]);
+
+  useEffect(() => {
+    const price = appliedFilters.find((obj) => obj.hasOwnProperty("price"))
+      ?.price || [0, 40000];
+    setValues(price);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
-    <div>
-      <div style={{ display: "flex", justifyContent: "space-between" }}>
-        <span>{values[0]}</span>
-        <span>{values[1]}</span>
+    <div style={{ padding: "20px" }}>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          marginBottom: "10px",
+        }}
+      >
+        <span>&#8377;{values[0]}</span>
+        <span>&#8377;{values[1]}</span>
       </div>
       <Range
         values={values}
         min={0}
         max={40000}
-        step={1}
+        step={50}
         onChange={handleChange}
         renderTrack={({ props, children }) => (
           <div
@@ -44,7 +62,7 @@ const RangeSliderWithTwoPointers = () => {
               ...props.style,
               height: "20px",
               width: "20px",
-              backgroundColor: "#4287f5", // Set the marker color to blue
+              backgroundColor: "#4287f5",
               boxShadow: "0 2px 6px rgba(0, 0, 0, 0.1)",
               borderRadius: "50%",
               outline: "none",

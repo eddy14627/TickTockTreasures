@@ -50,10 +50,10 @@ const router = createBrowserRouter(
       />
       <Route path="/product/:id" element={<ProductScreen />} />
       <Route path="/shop" element={<ShopScreen />} />
-      <Route path="shop/search/:keyword" element={<ShopScreen />} />
-      <Route path="shop/page/:pageNumber" element={<ShopScreen />} />
+      <Route path="/shop/search/:keyword" element={<ShopScreen />} />
+      <Route path="/shop/page/:pageNumber" element={<ShopScreen />} />
       <Route
-        path="shop/search/:keyword/page/:pageNumber"
+        path="/shop/search/:keyword/page/:pageNumber"
         element={<ShopScreen />}
       />
       <Route path="/cart" element={<CartScreen />} />

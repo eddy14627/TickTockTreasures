@@ -1,33 +1,21 @@
 import React, { useEffect, useState } from "react";
 import { Form } from "react-bootstrap";
 import { useGetAvailableBrandNameQuery } from "../../slices/filterApiSlice";
-import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { setfilters } from "../../slices/filterSlice";
 
 const CheckboxGroup = () => {
-  const { pageNumber = 1 } = useParams();
   const dispatch = useDispatch();
   const appliedFilters = useSelector((state) => state.appliedFilters);
-  console.log(appliedFilters);
   const [selectedCheckboxes, setSelectedCheckboxes] = useState([]);
-  // const options = [];
   const options = [];
   const { data } = useGetAvailableBrandNameQuery();
-  // const { data } = useGetAvailableBrandNameQuery();
 
   if (data) {
     for (let i = 0; i < data.brandNameList.length; i++) {
       options.push({ id: i, label: data.brandNameList[i] });
     }
   }
-  // useEffect(() => {
-  //   if (data) {
-  //     for (let i = 0; i < data.brandNameList.length; i++) {
-  //       options.push({ id: i, label: data.brandNameList[i] });
-  //     }
-  //   }
-  // }, []);
 
   useEffect(() => {
     const brand =

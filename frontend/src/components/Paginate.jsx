@@ -7,6 +7,7 @@ const Paginate = ({
   isAdmin = false,
   keyword = "",
   isShop = false,
+  onPageChange,
 }) => {
   return (
     pages > 1 && (
@@ -26,7 +27,12 @@ const Paginate = ({
                 : `/admin/productlist/${x + 1}`
             }
           >
-            <Pagination.Item active={x + 1 === page}>{x + 1}</Pagination.Item>
+            <Pagination.Item
+              active={x + 1 === page}
+              onClick={() => onPageChange(x + 1)}
+            >
+              {x + 1}
+            </Pagination.Item>
           </LinkContainer>
         ))}
       </Pagination>

@@ -72,7 +72,19 @@ import Product from "../models/productModel.js";
 // });
 
 export const fetchDataByFilters = asyncHandler(async (req, res) => {
+  const pageSize = process.env.PAGINATION_LIMIT;
   const filters = req.body;
+  // console.log(req.query.keyword);
+  const page = Number(req.query.pageNumber) || 1;
+
+  const keyword = req.query.keyword
+    ? {
+        name: {
+          $regex: req.query.keyword,
+          $options: "i",
+        },
+      }
+    : {};
   let query = {};
 
   filters.forEach((filter) => {
@@ -96,20 +108,17 @@ export const fetchDataByFilters = asyncHandler(async (req, res) => {
     }
   });
 
-  console.log(query);
-  // for()
-  // query = {
-  //   gender: { $in: ["female"] },
-  // };
-  try {
-    const count = await Product.countDocuments({ ...query });
-    const products = await Product.find({ ...query });
+  const count = await Product.countDocuments({ ...query, ...keyword });
+  const products = await Product.find({ ...query, ...keyword })
+    .limit(pageSize)
+    .skip(pageSize * (page - 1));
 
-    res.json({ products, count });
-  } catch (error) {
-    console.error("Error fetching products:", error);
-    res.status(500).json({ error: "Failed to fetch products" });
-  }
+  return res.json({
+    products,
+    count,
+    page,
+    pages: Math.ceil(count / pageSize),
+  });
 });
 
 export const filterByBrand = asyncHandler(async (req, res) => {

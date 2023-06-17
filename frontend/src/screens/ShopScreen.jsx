@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { BsFilterLeft } from "react-icons/bs";
+import { BsCheckLg, BsFilterLeft } from "react-icons/bs";
 import { Button, Offcanvas } from "react-bootstrap";
 import RangeSliderWithTwoPointers from "../components/widgets/RangeSlider";
 import GenderBox from "../components/widgets/GenderBox";
@@ -16,8 +16,9 @@ import {
   useFiltersAppiliedMutation,
   useGetAvailableBrandNameQuery,
 } from "../slices/filterApiSlice";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Rating from "../components/widgets/RatingBox";
+import { resetFilters } from "../slices/filterSlice";
 
 const ShopScreen = () => {
   const { pageNumber = 1, keyword = "" } = useParams();
@@ -28,14 +29,11 @@ const ShopScreen = () => {
 
   const navigate = useNavigate();
   const filters = useSelector((state) => state.appliedFilters);
-  console.log(filters);
   const options = [];
+  const dispatch = useDispatch();
+
+  // Get the list of available brand names
   const { data: brandNames } = useGetAvailableBrandNameQuery();
-  // const [filtersAppilied, { isLoading: loadingUpdate }] =
-  //   useFiltersAppiliedMutation({
-  //     keyword,
-  //     pageNumber,
-  //   });
   useEffect(() => {
     if (brandNames) {
       for (let i = 0; i < brandNames.brandNameList.length; i++) {
@@ -43,20 +41,17 @@ const ShopScreen = () => {
       }
     }
   }, []);
+
   const [filtersAppilied, { isLoading: loadingUpdate }] =
     useFiltersAppiliedMutation();
-  // setData(response.data);
-  // console.log(response);
+
   const fetchData = async () => {
-    // const response = await filtersAppilied({ filters, keyword, pageNumber });
     const response = await filtersAppilied({
       filters: filters,
       keyword: keyword,
       pageNumber: pageNumber,
     });
-    console.log(response);
     setData(response.data);
-    console.log(response.data);
     setIsLoading(false);
     setError(response.error);
     setIsFilterApplied(false);
@@ -76,8 +71,14 @@ const ShopScreen = () => {
     setIsOpen(!isOpen);
     setIsFilterApplied(true);
   };
+  const handelApplyReset = () => {
+    dispatch(resetFilters());
+    setIsOpen(!isOpen);
+    setIsFilterApplied(true);
+  };
 
   const handlePageChange = (page) => {
+    setIsFilterApplied(true);
     navigate(`/shop/page/${page}`);
   };
 
@@ -121,7 +122,7 @@ const ShopScreen = () => {
             <Button onClick={handelApplyFilter}>apply</Button>
           </Row>
           <Row style={{ marginTop: "25px" }}>
-            <Button onClick={handelApplyFilter}>Reset</Button>
+            <Button onClick={handelApplyReset}>Reset</Button>
           </Row>
         </Offcanvas.Body>
       </Offcanvas>
@@ -148,11 +149,12 @@ const ShopScreen = () => {
             ) : (
               <Message variant="info">No products found</Message>
             )}
-
+            {console.log(data)}
             <Paginate
               pages={data && data.pages}
               page={data && data.page}
               keyword={keyword}
+              onClick={handlePageChange}
               onPageChange={handlePageChange}
               isShop={true}
             />

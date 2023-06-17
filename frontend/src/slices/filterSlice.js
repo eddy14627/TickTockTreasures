@@ -37,9 +37,13 @@ const filterSlice = createSlice({
       }
       localStorage.setItem("appliedFilters", JSON.stringify(state));
     },
+    resetFilters: (state) => {
+      state = [];
+      localStorage.setItem("appliedFilters", JSON.stringify(state));
+    },
   },
 });
 
-export const { setfilters } = filterSlice.actions;
+export const { setfilters, resetFilters } = filterSlice.actions;
 
 export default filterSlice.reducer;
