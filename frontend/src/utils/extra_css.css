@@ -24,3 +24,38 @@
 .product-price {
   margin-bottom: 0;
 }
+
+.horizontal-slider .slider-container {
+  overflow-x: scroll;
+}
+
+.horizontal-slider .slider-wrapper {
+  display: flex;
+}
+
+.horizontal-slider .slide {
+  flex: 0 0 auto;
+  margin-right: 10px; /* Adjust the spacing between slides */
+}
+
+.horizontal-slider .slide:last-child {
+  margin-right: 0;
+}
+
+.rating-filter {
+  display: flex;
+  align-items: center;
+}
+
+.checkboxes label,
+.stars span {
+  margin-right: 8px;
+}
+
+.active-star {
+  color: gold; /* Change the color to your desired active star color */
+}
+
+.inactive-star {
+  color: gray; /* Change the color to your desired inactive star color */
+}

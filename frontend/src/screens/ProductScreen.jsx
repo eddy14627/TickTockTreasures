@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -17,15 +17,19 @@ import { toast } from "react-toastify";
 import {
   useGetProductDetailsQuery,
   useCreateReviewMutation,
+  useGetProductsQuery,
 } from "../slices/productsApiSlice";
 import Rating from "../components/Rating";
 import Loader from "../components/Loader";
 import Message from "../components/widgets/Message";
 import Meta from "../components/Meta";
 import { addToCart } from "../slices/cartSlice";
+import Product from "../components/Product";
+import { useFiltersAppiliedMutation } from "../slices/filterApiSlice";
 
 const ProductScreen = () => {
   const { id: productId } = useParams();
+  const [products, setProducts] = useState([]);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -46,6 +50,24 @@ const ProductScreen = () => {
     refetch,
     error,
   } = useGetProductDetailsQuery(productId);
+
+  const [filtersAppilied, { isLoading: loadingUpdate }] =
+    useFiltersAppiliedMutation();
+
+  const fetchData = async () => {
+    if (product) {
+      const response = await filtersAppilied({
+        filters: [
+          { brand: [product.brand] },
+          { watchType: [product.watchType] },
+        ],
+      });
+      setProducts(response.data.products);
+    }
+  };
+  useEffect(() => {
+    fetchData();
+  }, [product]);
 
   const { userInfo } = useSelector((state) => state.auth);
 
@@ -266,6 +288,21 @@ const ProductScreen = () => {
               </ListGroup>
             </Col>
           </Row>
+
+          {products && (
+            <div className="horizontal-slider">
+              <h2>Related Products</h2>
+              <div className="slider-container">
+                <div className="slider-wrapper">
+                  {products.map((product) => (
+                    <div key={product._id} className="slide">
+                      <Product product={product} />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
         </>
       )}
     </>

@@ -6,13 +6,18 @@ import { setfilters } from "../../slices/filterSlice";
 const RangeSliderWithTwoPointers = () => {
   const [values, setValues] = useState([0, 40000]);
   const dispatch = useDispatch();
+
   const handleChange = (newValues) => {
     setValues(newValues);
-    dispatch(setfilters({ price: values }));
+    dispatch(setfilters({ price: newValues }));
   };
 
   return (
     <div>
+      <div style={{ display: "flex", justifyContent: "space-between" }}>
+        <span>{values[0]}</span>
+        <span>{values[1]}</span>
+      </div>
       <Range
         values={values}
         min={0}
@@ -37,14 +42,28 @@ const RangeSliderWithTwoPointers = () => {
             {...props}
             style={{
               ...props.style,
-              height: "16px",
-              width: "16px",
-              backgroundColor: "grey", // Set the marker color to grey
+              height: "20px",
+              width: "20px",
+              backgroundColor: "#4287f5", // Set the marker color to blue
               boxShadow: "0 2px 6px rgba(0, 0, 0, 0.1)",
               borderRadius: "50%",
               outline: "none",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              cursor: "grab",
+              border: "2px solid #fff",
             }}
-          />
+          >
+            <div
+              style={{
+                width: "8px",
+                height: "8px",
+                borderRadius: "50%",
+                background: "#fff",
+              }}
+            />
+          </div>
         )}
       />
     </div>

@@ -12,8 +12,12 @@ import Loader from "../components/Loader";
 import Message from "../components/widgets/Message";
 import Paginate from "../components/Paginate";
 import Meta from "../components/Meta";
-import { useFiltersAppiliedMutation } from "../slices/filterApiSlice";
+import {
+  useFiltersAppiliedMutation,
+  useGetAvailableBrandNameQuery,
+} from "../slices/filterApiSlice";
 import { useSelector } from "react-redux";
+import Rating from "../components/widgets/RatingBox";
 
 const ShopScreen = () => {
   const { pageNumber = 1, keyword = "" } = useParams();
@@ -25,11 +29,20 @@ const ShopScreen = () => {
   const navigate = useNavigate();
   const filters = useSelector((state) => state.appliedFilters);
   console.log(filters);
+  const options = [];
+  const { data: brandNames } = useGetAvailableBrandNameQuery();
   // const [filtersAppilied, { isLoading: loadingUpdate }] =
   //   useFiltersAppiliedMutation({
   //     keyword,
   //     pageNumber,
   //   });
+  useEffect(() => {
+    if (brandNames) {
+      for (let i = 0; i < brandNames.brandNameList.length; i++) {
+        options.push({ id: i, label: brandNames.brandNameList[i] });
+      }
+    }
+  }, []);
   const [filtersAppilied, { isLoading: loadingUpdate }] =
     useFiltersAppiliedMutation();
   // setData(response.data);
@@ -88,6 +101,10 @@ const ShopScreen = () => {
             <RangeSliderWithTwoPointers />
           </Row>
           <Row style={{ marginTop: "25px" }}>
+            <strong>Rating</strong>
+            <Rating />
+          </Row>
+          <Row style={{ marginTop: "25px" }}>
             <strong>Gender Type</strong>
             <GenderBox />
           </Row>
@@ -97,7 +114,7 @@ const ShopScreen = () => {
           </Row>
           <Row style={{ marginTop: "25px" }}>
             <strong>Brands</strong>
-            <BrandListBox />
+            <BrandListBox options={options} />
           </Row>
 
           <Row style={{ marginTop: "25px" }}>

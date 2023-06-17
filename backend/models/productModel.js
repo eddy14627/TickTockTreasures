@@ -33,7 +33,7 @@ const productSchema = mongoose.Schema(
     },
     image: {
       type: Array,
-      required: true,
+      // required: true,
     },
     brand: {
       type: String,

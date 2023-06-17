@@ -9,15 +9,25 @@ const CheckboxGroup = () => {
   const { pageNumber = 1 } = useParams();
   const dispatch = useDispatch();
   const appliedFilters = useSelector((state) => state.appliedFilters);
+  console.log(appliedFilters);
   const [selectedCheckboxes, setSelectedCheckboxes] = useState([]);
+  // const options = [];
   const options = [];
   const { data } = useGetAvailableBrandNameQuery();
+  // const { data } = useGetAvailableBrandNameQuery();
 
   if (data) {
     for (let i = 0; i < data.brandNameList.length; i++) {
       options.push({ id: i, label: data.brandNameList[i] });
     }
   }
+  // useEffect(() => {
+  //   if (data) {
+  //     for (let i = 0; i < data.brandNameList.length; i++) {
+  //       options.push({ id: i, label: data.brandNameList[i] });
+  //     }
+  //   }
+  // }, []);
 
   useEffect(() => {
     const brand =
@@ -30,7 +40,7 @@ const CheckboxGroup = () => {
 
     setSelectedCheckboxes(selectedbrandIds);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [appliedFilters, options]);
+  }, []);
 
   const handleCheckboxChange = (optionId) => {
     const isChecked = selectedCheckboxes.includes(optionId);
@@ -55,7 +65,7 @@ const CheckboxGroup = () => {
       dispatch(setfilters({ brand: selectedBrands }));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedCheckboxes, appliedFilters, dispatch, options]);
+  }, [selectedCheckboxes]);
 
   return (
     <div>

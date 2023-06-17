@@ -10,7 +10,7 @@ const Product = ({ product }) => {
           src={product.profileImage}
           variant="top"
           className="product-image"
-          style={{ height: "200px", width: "100%", objectFit: "cover" }}
+          style={{ height: "200px", width: "100%", objectFit: "contain" }}
         />
       </Link>
 
