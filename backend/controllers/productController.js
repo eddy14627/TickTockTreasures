@@ -20,12 +20,9 @@ const getProducts = asyncHandler(async (req, res) => {
     : {};
   console.log(keyword);
   const count = await Product.countDocuments({ ...keyword });
-  const products = await Product.find({ ...keyword })
-    .sort({ createdAt: -1 })
-    .limit(pageSize)
-    .skip(pageSize * (page - 1));
+  const products = await Product.find({ ...keyword }).sort({ createdAt: -1 });
 
-  res.json({ products, page, pages: Math.ceil(count / pageSize) });
+  res.json({ products });
 });
 
 // @desc    Fetch single product

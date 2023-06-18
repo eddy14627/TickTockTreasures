@@ -5,18 +5,54 @@ import { Link } from "react-router-dom";
 import Product from "../components/Product";
 import Loader from "../components/Loader";
 import Message from "../components/widgets/Message";
-import Paginate from "../components/Paginate";
 import ProductCarousel from "../components/ProductCarousel";
 import Meta from "../components/Meta";
 import "../utils/extra_css.css";
+import { useEffect, useState } from "react";
 
 const HomeScreen = () => {
   const { pageNumber, keyword } = useParams();
+  const [latest, setLatest] = useState([]);
+  const [bestSeller, setBestSeller] = useState([]);
+  const [smartWatches, setSmartWatches] = useState([]);
+  const [luxuryWatches, setLuxuryWatches] = useState([]);
+  const [casualWatches, setCasualWatches] = useState([]);
 
   const { data, isLoading, error } = useGetProductsQuery({
     keyword,
     pageNumber,
   });
+
+  useEffect(() => {
+    if (data && data.products) {
+      const productByLatest = data.products.slice(0, 8);
+      const productByBestSeller = data.products
+        .filter((product) => {
+          return product.rating >= 4;
+        })
+        .slice(0, 8);
+      const productBySmartWatches = data.products
+        .filter((product) => {
+          return product.watchType === "smart";
+        })
+        .slice(0, 8);
+      const productByLuxuryWatches = data.products
+        .filter((product) => {
+          return product.watchType === "lux";
+        })
+        .slice(0, 8);
+      const productByCasualWatches = data.products
+        .filter((product) => {
+          return product.watchType === "casual";
+        })
+        .slice(0, 8);
+      setLatest(productByLatest);
+      setBestSeller(productByBestSeller);
+      setSmartWatches(productBySmartWatches);
+      setLuxuryWatches(productByLuxuryWatches);
+      setCasualWatches(productByCasualWatches);
+    }
+  }, [data && data.products]);
 
   return (
     <>
@@ -41,7 +77,7 @@ const HomeScreen = () => {
             <div className="horizontal-slider">
               <div className="slider-container">
                 <div className="slider-wrapper">
-                  {data.products.map((product) => (
+                  {latest.map((product) => (
                     <Col key={product._id} sm={12} md={6} lg={4} xl={3}>
                       <Product product={product} />
                     </Col>
@@ -55,7 +91,7 @@ const HomeScreen = () => {
             <div className="horizontal-slider">
               <div className="slider-container">
                 <div className="slider-wrapper">
-                  {data.products.map((product) => (
+                  {bestSeller.map((product) => (
                     <Col key={product._id} sm={12} md={6} lg={4} xl={3}>
                       <Product product={product} />
                     </Col>
@@ -69,7 +105,7 @@ const HomeScreen = () => {
             <div className="horizontal-slider">
               <div className="slider-container">
                 <div className="slider-wrapper">
-                  {data.products.map((product) => (
+                  {smartWatches.map((product) => (
                     <Col key={product._id} sm={12} md={6} lg={4} xl={3}>
                       <Product product={product} />
                     </Col>
@@ -83,7 +119,7 @@ const HomeScreen = () => {
             <div className="horizontal-slider">
               <div className="slider-container">
                 <div className="slider-wrapper">
-                  {data.products.map((product) => (
+                  {luxuryWatches.map((product) => (
                     <Col key={product._id} sm={12} md={6} lg={4} xl={3}>
                       <Product product={product} />
                     </Col>
@@ -97,7 +133,7 @@ const HomeScreen = () => {
             <div className="horizontal-slider">
               <div className="slider-container">
                 <div className="slider-wrapper">
-                  {data.products.map((product) => (
+                  {casualWatches.map((product) => (
                     <Col key={product._id} sm={12} md={6} lg={4} xl={3}>
                       <Product product={product} />
                     </Col>
