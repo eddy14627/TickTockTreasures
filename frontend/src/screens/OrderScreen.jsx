@@ -150,9 +150,9 @@ const OrderScreen = () => {
                   <Col>${order.totalPrice}</Col>
                 </Row>
               </ListGroup.Item>
-              {!order.isPaid && (
+              {!isPending && (
                 <ListGroup.Item>
-                  <Button>Pay</Button>
+                  <Button onClick={handlePayment}>Pay</Button>
                 </ListGroup.Item>
               )}
 
