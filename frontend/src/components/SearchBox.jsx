@@ -11,7 +11,10 @@ const SearchBox = () => {
   const submitHandler = (e) => {
     e.preventDefault();
     if (keyword) {
-      navigate(`/search/${keyword.trim()}`);
+      /* The trim() method is a built-in JavaScript string
+      method that removes whitespace characters from both ends
+      of a string. */
+      navigate(`/shop/search/${keyword.trim()}`);
       setKeyword("");
     } else {
       navigate("/");

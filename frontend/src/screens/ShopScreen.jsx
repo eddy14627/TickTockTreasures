@@ -29,10 +29,10 @@ const ShopScreen = () => {
 
   const navigate = useNavigate();
   const filters = useSelector((state) => state.appliedFilters);
-  const options = [];
   const dispatch = useDispatch();
 
   // Get the list of available brand names
+  const options = [];
   const { data: brandNames } = useGetAvailableBrandNameQuery();
   useEffect(() => {
     if (brandNames) {

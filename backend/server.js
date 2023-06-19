@@ -35,10 +35,6 @@ app.use("/api/forgetPassword", forgetRoutes);
 app.use("/api/upload/upload-cloudinary", uploadOnCloudinary);
 app.use("/api/create-checkout-session", stripRoutes);
 
-app.get("/api/config/paypal", (req, res) =>
-  res.send({ clientId: process.env.PAYPAL_CLIENT_ID })
-);
-
 const __dirname = path.resolve();
 app.use("/uploads", express.static(path.join(__dirname, "/uploads")));
 
