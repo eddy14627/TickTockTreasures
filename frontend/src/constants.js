@@ -6,4 +6,4 @@ export const USERS_URL = "/api/users";
 export const FORGET_PASSWORD_URL = "/api/forgetPassword";
 export const FILTERS_URL = "/api/filters";
 export const ORDERS_URL = "/api/orders";
-export const PAYPAL_URL = "/api/config/paypal";
+export const PAID_URL = "/api/pay";
