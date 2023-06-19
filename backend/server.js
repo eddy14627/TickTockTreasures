@@ -8,12 +8,14 @@ import cors from "cors";
 import productRoutes from "./routes/productRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 import orderRoutes from "./routes/orderRoutes.js";
-import uploadRoutes from "./routes/uploadRoutes.js";
-import uploadOnCloudinary from "./controllers/uploadImageController.js";
+// import uploadRoutes from "./routes/uploadRoutes.js";
+// import uploadOnCloudinary from "./controllers/uploadImageController.js";
 import filtersRoutes from "./routes/filtersRoutes.js";
 import stripRoutes from "./routes/stripeRoutes.js";
 import { notFound, errorHandler } from "./middleware/errorMiddleware.js";
 import forgetRoutes from "./routes/PasswordChangeRoute.js";
+import cloudinaryUpload from "./routes/CloudinaryRoutes.js";
+// import fileUpload from "express-fileupload";
 
 const port = process.env.PORT || 5000;
 
@@ -30,9 +32,10 @@ app.use("/api/products", productRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/filters", filtersRoutes);
-app.use("/api/upload", uploadRoutes);
+// app.use("/api/upload", uploadRoutes);
+// app.use("/api/uploads", cloudinaryUpload);
 app.use("/api/forgetPassword", forgetRoutes);
-app.use("/api/upload/upload-cloudinary", uploadOnCloudinary);
+app.use("/api/upload/upload-cloudinary", cloudinaryUpload);
 app.use("/api/create-checkout-session", stripRoutes);
 
 const __dirname = path.resolve();

@@ -8,7 +8,7 @@ import { toast } from "react-toastify";
 import {
   useGetProductDetailsQuery,
   useUpdateProductMutation,
-  useUploadProductImageMutation,
+  useUploadProductImageOnCloudinaryMutation,
 } from "../../slices/productsApiSlice";
 
 const ProductEditScreen = () => {
@@ -36,8 +36,8 @@ const ProductEditScreen = () => {
   const [updateProduct, { isLoading: loadingUpdate }] =
     useUpdateProductMutation();
 
-  const [uploadProductImage, { isLoading: loadingUpload }] =
-    useUploadProductImageMutation();
+  const [uploadOnCloudinary, { isLoading: cloudinaryUploadLoading }] =
+    useUploadProductImageOnCloudinaryMutation();
 
   const navigate = useNavigate();
 
@@ -83,14 +83,11 @@ const ProductEditScreen = () => {
   const uploadImagesHandler = async (e) => {
     const formData = new FormData();
     const files = e.target.files;
-    console.log(files);
     for (let i = 0; i < files.length; i++) {
       formData.append("images", files[i]);
     }
-    console.log(formData);
-
     try {
-      const res = await uploadProductImage(formData).unwrap();
+      const res = await uploadOnCloudinary(formData).unwrap();
       toast.success(res.message);
       console.log(res);
       setImages(res.images);
@@ -107,8 +104,9 @@ const ProductEditScreen = () => {
     }
 
     try {
-      const res = await uploadProductImage(formData).unwrap();
+      const res = await uploadOnCloudinary(formData).unwrap();
       toast.success(res.message);
+      console.log(res);
       setProfileImage(res.images[0]);
     } catch (err) {
       toast.error(err?.data?.message || err.error);
@@ -157,7 +155,7 @@ const ProductEditScreen = () => {
                 multiple
               />
 
-              {loadingUpload && <Loader />}
+              {cloudinaryUploadLoading && <Loader />}
             </Form.Group>
             <Form.Group controlId="profileImage">
               <Form.Label>Profile Images</Form.Label>
@@ -168,7 +166,7 @@ const ProductEditScreen = () => {
                 accept="image/*"
                 multiple
               />
-              {loadingUpload && <Loader />}
+              {cloudinaryUploadLoading && <Loader />}
             </Form.Group>
             <Form.Group controlId="gender">
               <Form.Label>Gender Type</Form.Label>

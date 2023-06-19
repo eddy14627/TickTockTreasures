@@ -1,7 +1,11 @@
 import React, { useEffect } from "react";
 import { Button } from "react-bootstrap";
 import GoogleButton from "../../assets/googleButton.svg";
-import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import {
+  GoogleAuthProvider,
+  signInWithPopup,
+  signInWithRedirect,
+} from "firebase/auth";
 import { auth } from "../../firebase/firebaseConfig";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -14,14 +18,16 @@ import { setCredentials } from "../../slices/authSlice";
 
 const GoogleAuthButton = ({ buttonDisplay }) => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  // where to redirect after login
   const { search } = useLocation();
   const sp = new URLSearchParams(search);
   const redirect = sp.get("redirect") || "/";
+
   const { userInfo } = useSelector((state) => state.auth);
   const [googleRegister] = useGoogleRegisterMutation();
   const [googleLogin] = useGoogleLoginMutation();
-
-  const navigate = useNavigate();
 
   useEffect(() => {
     if (userInfo) {
@@ -33,7 +39,10 @@ const GoogleAuthButton = ({ buttonDisplay }) => {
     // Handle the Google authentication response here
     try {
       const provider = new GoogleAuthProvider();
-      const result = await signInWithPopup(auth, provider);
+      provider.setCustomParameters({ prompt: "select_account" });
+      // const result = await signInWithPopup(auth, provider);
+      const result = await signInWithRedirect(auth, provider);
+
       const { displayName, email } = result.user;
       const name = displayName;
       if (buttonDisplay === "Sign up with Google") {
