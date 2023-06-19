@@ -1,11 +1,7 @@
 import React, { useEffect } from "react";
 import { Button } from "react-bootstrap";
 import GoogleButton from "../../assets/googleButton.svg";
-import {
-  GoogleAuthProvider,
-  signInWithPopup,
-  signInWithRedirect,
-} from "firebase/auth";
+import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { auth } from "../../firebase/firebaseConfig";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -40,9 +36,7 @@ const GoogleAuthButton = ({ buttonDisplay }) => {
     try {
       const provider = new GoogleAuthProvider();
       provider.setCustomParameters({ prompt: "select_account" });
-      // const result = await signInWithPopup(auth, provider);
-      const result = await signInWithRedirect(auth, provider);
-
+      const result = await signInWithPopup(auth, provider);
       const { displayName, email } = result.user;
       const name = displayName;
       if (buttonDisplay === "Sign up with Google") {
