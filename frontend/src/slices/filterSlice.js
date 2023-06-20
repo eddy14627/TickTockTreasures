@@ -36,10 +36,10 @@ const filterSlice = createSlice({
       }
       localStorage.setItem("appliedFilters", JSON.stringify(state));
     },
-    resetFilters: (state) => {
-      state = [];
-      localStorage.setItem("appliedFilters", JSON.stringify(state));
-    },
+    // resetFilters: (state) => {
+    //   state = [];
+    //   localStorage.setItem("appliedFilters", JSON.stringify(state));
+    // },
   },
 });
 

@@ -33,10 +33,8 @@ const addOrderItems = asyncHandler(async (req, res) => {
       shippingPrice,
       totalPrice,
     });
-    console.log("hello 1");
 
     const createdOrder = await order.save();
-    console.log("hello 2");
 
     res.status(201).json(createdOrder);
   }
@@ -71,11 +69,18 @@ const getOrderById = asyncHandler(async (req, res) => {
 // @route   GET /api/orders/:id/pay
 // @access  Private
 const updateOrderToPaid = asyncHandler(async (req, res) => {
-  const order = await Order.findById(req.params.orderId);
+  const order = await Order.findById(req.params.id);
 
   if (order) {
     order.isPaid = true;
     order.paidAt = Date.now();
+    order.paymentResult = {
+      id: req.body.id,
+      status: req.body.status,
+      update_time: req.body.update_time,
+      email_address: req.body.payer.email_address,
+    };
+
     const updatedOrder = await order.save();
 
     res.json(updatedOrder);

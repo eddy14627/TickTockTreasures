@@ -30,7 +30,7 @@ const ProductCarousel = () => {
             </div>
             <Carousel.Caption className="carousel-caption">
               <h2 className="text-white text-right">
-                {product.name} (&#8377;{product.price})
+                {product.name} (${product.price})
               </h2>
             </Carousel.Caption>
           </Link>

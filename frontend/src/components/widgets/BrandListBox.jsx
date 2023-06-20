@@ -4,7 +4,7 @@ import { useGetAvailableBrandNameQuery } from "../../slices/filterApiSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { setfilters } from "../../slices/filterSlice";
 
-const CheckboxGroup = () => {
+const CheckboxGroup = ({ reset = false, resetfun }) => {
   const dispatch = useDispatch();
   const appliedFilters = useSelector((state) => state.appliedFilters);
   const [selectedCheckboxes, setSelectedCheckboxes] = useState([]);
@@ -16,6 +16,12 @@ const CheckboxGroup = () => {
       options.push({ id: i, label: data.brandNameList[i] });
     }
   }
+
+  useEffect(() => {
+    setSelectedCheckboxes([]);
+    dispatch(setfilters({ brand: [] }));
+    resetfun(false);
+  }, [reset]);
 
   useEffect(() => {
     const brand =

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { BsCheckLg, BsFilterLeft } from "react-icons/bs";
+import { BsFilterLeft } from "react-icons/bs";
 import { Button, Offcanvas } from "react-bootstrap";
 import RangeSliderWithTwoPointers from "../components/widgets/RangeSlider";
 import GenderBox from "../components/widgets/GenderBox";
@@ -12,35 +12,20 @@ import Loader from "../components/Loader";
 import Message from "../components/widgets/Message";
 import Paginate from "../components/Paginate";
 import Meta from "../components/Meta";
-import {
-  useFiltersAppiliedMutation,
-  useGetAvailableBrandNameQuery,
-} from "../slices/filterApiSlice";
-import { useDispatch, useSelector } from "react-redux";
+import { useFiltersAppiliedMutation } from "../slices/filterApiSlice";
+import { useSelector } from "react-redux";
 import Rating from "../components/widgets/RatingBox";
-import { resetFilters } from "../slices/filterSlice";
 
 const ShopScreen = () => {
   const { pageNumber = 1, keyword = "" } = useParams();
   const [isFilterApplied, setIsFilterApplied] = useState(true);
+  const [isReset, setIsReset] = useState(false);
   const [data, setData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
   const navigate = useNavigate();
   const filters = useSelector((state) => state.appliedFilters);
-  const dispatch = useDispatch();
-
-  // Get the list of available brand names
-  const options = [];
-  const { data: brandNames } = useGetAvailableBrandNameQuery();
-  useEffect(() => {
-    if (brandNames) {
-      for (let i = 0; i < brandNames.brandNameList.length; i++) {
-        options.push({ id: i, label: brandNames.brandNameList[i] });
-      }
-    }
-  }, []);
 
   const [filtersAppilied, { isLoading: loadingUpdate }] =
     useFiltersAppiliedMutation();
@@ -72,7 +57,7 @@ const ShopScreen = () => {
     setIsFilterApplied(true);
   };
   const handelApplyReset = () => {
-    dispatch(resetFilters());
+    setIsReset(true);
     setIsOpen(!isOpen);
     setIsFilterApplied(true);
   };
@@ -99,23 +84,23 @@ const ShopScreen = () => {
         <Offcanvas.Body>
           <Row style={{ marginTop: "0px" }}>
             <strong style={{ marginBottom: "15px" }}>Price</strong>
-            <RangeSliderWithTwoPointers />
+            <RangeSliderWithTwoPointers reset={isReset} resetfun={setIsReset} />
           </Row>
           <Row style={{ marginTop: "25px" }}>
             <strong>Rating</strong>
-            <Rating />
+            <Rating reset={isReset} resetfun={setIsReset} />
           </Row>
           <Row style={{ marginTop: "25px" }}>
             <strong>Gender Type</strong>
-            <GenderBox />
+            <GenderBox reset={isReset} resetfun={setIsReset} />
           </Row>
           <Row style={{ marginTop: "25px" }}>
             <strong>Watch Type</strong>
-            <WatchType />
+            <WatchType reset={isReset} resetfun={setIsReset} />
           </Row>
           <Row style={{ marginTop: "25px" }}>
             <strong>Brands</strong>
-            <BrandListBox options={options} />
+            <BrandListBox reset={isReset} resetfun={setIsReset} />
           </Row>
 
           <Row style={{ marginTop: "25px" }}>
@@ -149,7 +134,7 @@ const ShopScreen = () => {
             ) : (
               <Message variant="info">No products found</Message>
             )}
-            {console.log(data)}
+            {/* {console.log(data)} */}
             <Paginate
               pages={data && data.pages}
               page={data && data.page}

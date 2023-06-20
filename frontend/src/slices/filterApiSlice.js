@@ -16,7 +16,7 @@ export const filterApiSlice = apiSlice.injectEndpoints({
         params: { pageNumber, keyword },
         body: filters,
       }),
-      // keepUnusedDataFor: 5,
+      keepUnusedDataFor: 5,
       providesTags: ["Filters"],
     }),
   }),

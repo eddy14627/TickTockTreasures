@@ -17,7 +17,7 @@ const PaymentScreen = () => {
     }
   }, [navigate, shippingAddress]);
 
-  const [paymentMethod, setPaymentMethod] = useState("Stripe");
+  const [paymentMethod, setPaymentMethod] = useState("paypal");
 
   const dispatch = useDispatch();
 
@@ -38,7 +38,7 @@ const PaymentScreen = () => {
             <Form.Check
               className="my-2"
               type="radio"
-              label="Stripe"
+              label="paypal or Credit Card"
               id="Stripe"
               name="paymentMethod"
               value="Stripe"

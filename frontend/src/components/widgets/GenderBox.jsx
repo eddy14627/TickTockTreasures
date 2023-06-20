@@ -3,7 +3,8 @@ import { Form } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { setfilters } from "../../slices/filterSlice";
 
-const CheckboxGroup = () => {
+const CheckboxGroup = ({ reset = false, resetfun }) => {
+  console.log(reset);
   const dispatch = useDispatch();
   const appliedFilters = useSelector((state) => state.appliedFilters);
   // console.log(appliedFilters[0].gender);
@@ -14,6 +15,12 @@ const CheckboxGroup = () => {
     { id: 3, label: "unisex" },
     { id: 4, label: "clock" },
   ];
+
+  useEffect(() => {
+    setSelectedCheckboxes([]);
+    dispatch(setfilters({ gender: [] }));
+    resetfun(false);
+  }, [reset]);
 
   useEffect(() => {
     const gender =

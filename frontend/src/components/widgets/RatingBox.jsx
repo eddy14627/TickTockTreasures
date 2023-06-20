@@ -4,7 +4,7 @@ import { FaStar, FaRegStar } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { setfilters } from "../../slices/filterSlice";
 
-const Rating = () => {
+const Rating = ({ reset = false, resetfun }) => {
   const dispatch = useDispatch();
   const [values, setValues] = useState([]);
   const appliedFilters = useSelector((state) => state.appliedFilters);
@@ -22,6 +22,12 @@ const Rating = () => {
   };
 
   useEffect(() => {
+    setValues([]);
+    dispatch(setfilters({ rating: [] }));
+    resetfun(false);
+  }, [reset]);
+
+  useEffect(() => {
     dispatch(setfilters({ rating: values }));
   }, [values, dispatch]);
 
@@ -33,7 +39,7 @@ const Rating = () => {
     console.log(reqRating);
     setValues(reqRating);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  });
 
   const renderStars = (count) => {
     const stars = [];

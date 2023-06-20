@@ -3,7 +3,7 @@ import { Range } from "react-range";
 import { useDispatch, useSelector } from "react-redux";
 import { setfilters } from "../../slices/filterSlice";
 
-const RangeSliderWithTwoPointers = () => {
+const RangeSliderWithDifferentStyle = ({ reset = false, resetfun }) => {
   const [values, setValues] = useState([0, 40000]);
   const appliedFilters = useSelector((state) => state.appliedFilters);
   const dispatch = useDispatch();
@@ -14,6 +14,12 @@ const RangeSliderWithTwoPointers = () => {
   };
 
   useEffect(() => {
+    setValues([0, 40000]);
+    dispatch(setfilters({ price: [0, 40000] }));
+    resetfun(false);
+  }, [reset]);
+
+  useEffect(() => {
     dispatch(setfilters({ price: values }));
   }, [values, dispatch]);
 
@@ -22,7 +28,7 @@ const RangeSliderWithTwoPointers = () => {
       ?.price || [0, 40000];
     setValues(price);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  });
 
   return (
     <div style={{ padding: "20px" }}>
@@ -33,38 +39,40 @@ const RangeSliderWithTwoPointers = () => {
           marginBottom: "10px",
         }}
       >
-        <span>&#8377;{values[0]}</span>
-        <span>&#8377;{values[1]}</span>
+        <span>${values[0]}</span>
+        <span>${values[1]}</span>
       </div>
       <Range
         values={values}
         min={0}
         max={40000}
-        step={50}
+        step={100}
         onChange={handleChange}
         renderTrack={({ props, children }) => (
           <div
             {...props}
             style={{
               ...props.style,
-              height: "6px",
+              height: "20px",
+              borderRadius: "10px",
               background: "#ddd",
-              borderRadius: "3px",
+              display: "flex",
+              alignItems: "center",
             }}
           >
             {children}
           </div>
         )}
-        renderThumb={({ props }) => (
+        renderThumb={({ props, index }) => (
           <div
             {...props}
             style={{
               ...props.style,
-              height: "20px",
+              height: "40px",
               width: "20px",
-              backgroundColor: "#4287f5",
+              backgroundColor: index === 0 ? "#4287f5" : "#f54242",
+              borderRadius: "5px",
               boxShadow: "0 2px 6px rgba(0, 0, 0, 0.1)",
-              borderRadius: "50%",
               outline: "none",
               display: "flex",
               justifyContent: "center",
@@ -72,20 +80,22 @@ const RangeSliderWithTwoPointers = () => {
               cursor: "grab",
               border: "2px solid #fff",
             }}
-          >
-            <div
-              style={{
-                width: "8px",
-                height: "8px",
-                borderRadius: "50%",
-                background: "#fff",
-              }}
-            />
-          </div>
+          />
+        )}
+        renderRail={({ props }) => (
+          <div
+            {...props}
+            style={{
+              ...props.style,
+              height: "10px",
+              borderRadius: "5px",
+              background: "#ccc",
+            }}
+          />
         )}
       />
     </div>
   );
 };
 
-export default RangeSliderWithTwoPointers;
+export default RangeSliderWithDifferentStyle;
