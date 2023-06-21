@@ -23,7 +23,6 @@ import { resetFilters } from "../slices/filterSlice";
 const ShopScreen = () => {
   const { pageNumber = 1, keyword = "" } = useParams();
   const [isFilterApplied, setIsFilterApplied] = useState(true);
-  const [isReset, setIsReset] = useState(false);
   const [data, setData] = useState(null);
   const [brandOptions, setBrandOptions] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -77,7 +76,6 @@ const ShopScreen = () => {
     setIsFilterApplied(true);
   };
   const handelApplyReset = () => {
-    // setIsReset(true);
     setIsOpen(!isOpen);
     setIsFilterApplied(true);
     dispatch(resetFilters());
@@ -105,27 +103,23 @@ const ShopScreen = () => {
         <Offcanvas.Body>
           <Row style={{ marginTop: "0px" }}>
             <strong style={{ marginBottom: "15px" }}>Price</strong>
-            <RangeSliderWithTwoPointers reset={isReset} resetfun={setIsReset} />
+            <RangeSliderWithTwoPointers />
           </Row>
           <Row style={{ marginTop: "25px" }}>
             <strong>Rating</strong>
-            <Rating reset={isReset} resetfun={setIsReset} />
+            <Rating />
           </Row>
           <Row style={{ marginTop: "25px" }}>
             <strong>Gender Type</strong>
-            <GenderBox reset={isReset} resetfun={setIsReset} />
+            <GenderBox />
           </Row>
           <Row style={{ marginTop: "25px" }}>
             <strong>Watch Type</strong>
-            <WatchType reset={isReset} resetfun={setIsReset} />
+            <WatchType />
           </Row>
           <Row style={{ marginTop: "25px" }}>
             <strong>Brands</strong>
-            <BrandListBox
-              options={brandOptions}
-              reset={isReset}
-              resetfun={setIsReset}
-            />
+            <BrandListBox options={brandOptions} />
           </Row>
 
           <Row style={{ marginTop: "25px" }}>

@@ -3,7 +3,7 @@ import { Form } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { setfilters } from "../../slices/filterSlice";
 
-const CheckboxGroup = ({ options, reset = false, resetfun }) => {
+const CheckboxGroup = ({ options }) => {
   const dispatch = useDispatch();
   const appliedFilters = useSelector((state) => state.appliedFilters);
   const [selectedCheckboxes, setSelectedCheckboxes] = useState([]);

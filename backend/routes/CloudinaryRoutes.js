@@ -1,7 +1,9 @@
 import express from "express";
 import { v2 as cloudinary } from "cloudinary";
 import multer from "multer";
+import dotenv from "dotenv";
 import fs from "fs";
+dotenv.config();
 
 const router = express.Router();
 const upload = multer({ dest: "uploads/" });
@@ -12,6 +14,12 @@ cloudinary.config({
   api_key: process.env.API_KEY,
   api_secret: process.env.API_SECRET,
 });
+
+// cloudinary.config({
+//   cloud_name: "ticktocktreasure",
+//   api_key: "675972988826879",
+//   api_secret: "taB9BmTM0vUbLocHNmiKYjvxYjE",
+// });
 
 router.post("/", upload.array("images", 5), (req, res) => {
   // Get the uploaded files

@@ -3,20 +3,10 @@ import { Range } from "react-range";
 import { useDispatch, useSelector } from "react-redux";
 import { setfilters } from "../../slices/filterSlice";
 
-const RangeSliderWithDifferentStyle = ({ reset = false, resetfun }) => {
+const RangeSliderWithDifferentStyle = () => {
   const dispatch = useDispatch();
   const [values, setValues] = useState([0, 20000]);
   const appliedFilters = useSelector((state) => state.appliedFilters);
-
-  useEffect(() => {
-    if (reset) {
-      setValues([0, 20000]);
-      dispatch(setfilters({ price: [0, 20000] }));
-      resetfun(false);
-    }
-  }, [reset]);
-
-  // useEffect(() => {}, [values, dispatch]);
 
   useEffect(() => {
     const price = appliedFilters.find((obj) => obj.hasOwnProperty("price"))

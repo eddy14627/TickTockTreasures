@@ -3,7 +3,7 @@ import { Form } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { setfilters } from "../../slices/filterSlice";
 
-const CheckboxGroup = ({ reset = false, resetfun }) => {
+const CheckboxGroup = () => {
   const dispatch = useDispatch();
   const appliedFilters = useSelector((state) => state.appliedFilters);
 
@@ -14,14 +14,6 @@ const CheckboxGroup = ({ reset = false, resetfun }) => {
     { id: 3, label: "casual" },
     { id: 4, label: "sports" },
   ];
-
-  useEffect(() => {
-    if (reset) {
-      setSelectedCheckboxes([]);
-      dispatch(setfilters({ watchType: [] }));
-      resetfun(false);
-    }
-  }, [reset]);
 
   useEffect(() => {
     const watchType =

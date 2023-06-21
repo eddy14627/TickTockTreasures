@@ -17,6 +17,7 @@ const HomeScreen = () => {
   const [smartWatches, setSmartWatches] = useState([]);
   const [luxuryWatches, setLuxuryWatches] = useState([]);
   const [casualWatches, setCasualWatches] = useState([]);
+  const [sportsWatches, setSportsWatches] = useState([]);
 
   const { data, isLoading, error } = useGetProductsQuery({
     keyword,
@@ -46,12 +47,19 @@ const HomeScreen = () => {
           return product.watchType === "casual";
         })
         .slice(0, 8);
+      const productBySportsWatches = data.products
+        .filter((product) => {
+          return product.watchType === "sports";
+        })
+        .slice(0, 8);
       setLatest(productByLatest);
       setBestSeller(productByBestSeller);
       setSmartWatches(productBySmartWatches);
       setLuxuryWatches(productByLuxuryWatches);
       setCasualWatches(productByCasualWatches);
+      setSportsWatches(productBySportsWatches);
     }
+    // eslint-disable-next-line
   }, [data && data.products]);
 
   return (
@@ -134,6 +142,20 @@ const HomeScreen = () => {
               <div className="slider-container">
                 <div className="slider-wrapper">
                   {casualWatches.map((product) => (
+                    <Col key={product._id} sm={12} md={6} lg={4} xl={3}>
+                      <Product product={product} />
+                    </Col>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </Row>
+          <h1>Sports Watches</h1>
+          <Row className="mb-4">
+            <div className="horizontal-slider">
+              <div className="slider-container">
+                <div className="slider-wrapper">
+                  {sportsWatches.map((product) => (
                     <Col key={product._id} sm={12} md={6} lg={4} xl={3}>
                       <Product product={product} />
                     </Col>
