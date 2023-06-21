@@ -11,6 +11,7 @@ import {
 } from "../../slices/usersApiSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { setCredentials } from "../../slices/authSlice";
+import { resetFilters } from "../../slices/filterSlice";
 
 const GoogleAuthButton = ({ buttonDisplay }) => {
   const dispatch = useDispatch();
@@ -34,6 +35,7 @@ const GoogleAuthButton = ({ buttonDisplay }) => {
   const responseGoogle = async (response) => {
     // Handle the Google authentication response here
     try {
+      dispatch(resetFilters());
       const provider = new GoogleAuthProvider();
       provider.setCustomParameters({ prompt: "select_account" });
       const result = await signInWithPopup(auth, provider);

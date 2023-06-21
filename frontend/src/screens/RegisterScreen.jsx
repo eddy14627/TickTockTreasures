@@ -9,6 +9,7 @@ import { useRegisterMutation } from "../slices/usersApiSlice";
 import { setCredentials } from "../slices/authSlice";
 import { toast } from "react-toastify";
 import GoogleAuthButton from "../components/widgets/GoogleAuthButton";
+import { resetFilters } from "../slices/filterSlice";
 
 const RegisterScreen = () => {
   const [name, setName] = useState("");
@@ -42,6 +43,7 @@ const RegisterScreen = () => {
       try {
         const res = await register({ name, email, password }).unwrap();
         dispatch(setCredentials({ ...res }));
+        dispatch(resetFilters());
         navigate(redirect);
       } catch (err) {
         toast.error(err?.data?.message || err.error);

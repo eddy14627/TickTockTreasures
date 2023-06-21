@@ -16,9 +16,11 @@ const CheckboxGroup = ({ reset = false, resetfun }) => {
   ];
 
   useEffect(() => {
-    setSelectedCheckboxes([]);
-    dispatch(setfilters({ watchType: [] }));
-    resetfun(false);
+    if (reset) {
+      setSelectedCheckboxes([]);
+      dispatch(setfilters({ watchType: [] }));
+      resetfun(false);
+    }
   }, [reset]);
 
   useEffect(() => {

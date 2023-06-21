@@ -1,27 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Form } from "react-bootstrap";
-import { useGetAvailableBrandNameQuery } from "../../slices/filterApiSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { setfilters } from "../../slices/filterSlice";
 
-const CheckboxGroup = ({ reset = false, resetfun }) => {
+const CheckboxGroup = ({ options, reset = false, resetfun }) => {
   const dispatch = useDispatch();
   const appliedFilters = useSelector((state) => state.appliedFilters);
   const [selectedCheckboxes, setSelectedCheckboxes] = useState([]);
-  const options = [];
-  const { data } = useGetAvailableBrandNameQuery();
-
-  if (data) {
-    for (let i = 0; i < data.brandNameList.length; i++) {
-      options.push({ id: i, label: data.brandNameList[i] });
-    }
-  }
-
-  useEffect(() => {
-    setSelectedCheckboxes([]);
-    dispatch(setfilters({ brand: [] }));
-    resetfun(false);
-  }, [reset]);
 
   useEffect(() => {
     const brand =
@@ -32,9 +17,8 @@ const CheckboxGroup = ({ reset = false, resetfun }) => {
       return option ? option.id : null;
     });
 
-    setSelectedCheckboxes(selectedbrandIds);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    setSelectedCheckboxes(selectedbrandIds.filter((id) => id !== null));
+  }, [options]);
 
   const handleCheckboxChange = (optionId) => {
     const isChecked = selectedCheckboxes.includes(optionId);
@@ -49,21 +33,16 @@ const CheckboxGroup = ({ reset = false, resetfun }) => {
   };
 
   useEffect(() => {
-    const selectedBrands = selectedCheckboxes.map((id) => options[id]?.label);
-    const currentSelectedBrands =
-      appliedFilters.find((obj) => obj.hasOwnProperty("brand"))?.brand || [];
+    const selectedBrands = selectedCheckboxes.map(
+      (id) => options[id]?.label || ""
+    );
 
-    if (
-      JSON.stringify(selectedBrands) !== JSON.stringify(currentSelectedBrands)
-    ) {
-      dispatch(setfilters({ brand: selectedBrands }));
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedCheckboxes]);
+    dispatch(setfilters({ brand: selectedBrands }));
+  }, [selectedCheckboxes, dispatch, options]);
 
   return (
     <div>
-      {options.map((option) => (
+      {options.map((option, id) => (
         <Form.Check
           key={option.id}
           type="checkbox"

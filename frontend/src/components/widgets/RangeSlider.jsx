@@ -4,31 +4,37 @@ import { useDispatch, useSelector } from "react-redux";
 import { setfilters } from "../../slices/filterSlice";
 
 const RangeSliderWithDifferentStyle = ({ reset = false, resetfun }) => {
-  const [values, setValues] = useState([0, 40000]);
-  const appliedFilters = useSelector((state) => state.appliedFilters);
   const dispatch = useDispatch();
-
-  const handleChange = (newValues) => {
-    setValues(newValues);
-    dispatch(setfilters({ price: newValues }));
-  };
+  const [values, setValues] = useState([0, 20000]);
+  const appliedFilters = useSelector((state) => state.appliedFilters);
 
   useEffect(() => {
-    setValues([0, 40000]);
-    dispatch(setfilters({ price: [0, 40000] }));
-    resetfun(false);
+    if (reset) {
+      setValues([0, 20000]);
+      dispatch(setfilters({ price: [0, 20000] }));
+      resetfun(false);
+    }
   }, [reset]);
 
-  useEffect(() => {
-    dispatch(setfilters({ price: values }));
-  }, [values, dispatch]);
+  // useEffect(() => {}, [values, dispatch]);
 
   useEffect(() => {
     const price = appliedFilters.find((obj) => obj.hasOwnProperty("price"))
-      ?.price || [0, 40000];
+      ?.price || [0, 20000];
     setValues(price);
+    dispatch(setfilters({ price: values }));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  });
+  }, []);
+
+  useEffect(() => {
+    dispatch(setfilters({ price: values }));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [values]);
+
+  const handleChange = (newValues) => {
+    dispatch(setfilters({ price: newValues }));
+    setValues(newValues);
+  };
 
   return (
     <div style={{ padding: "20px" }}>
@@ -45,7 +51,7 @@ const RangeSliderWithDifferentStyle = ({ reset = false, resetfun }) => {
       <Range
         values={values}
         min={0}
-        max={40000}
+        max={20000}
         step={100}
         onChange={handleChange}
         renderTrack={({ props, children }) => (

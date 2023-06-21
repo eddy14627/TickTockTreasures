@@ -22,9 +22,11 @@ const Rating = ({ reset = false, resetfun }) => {
   };
 
   useEffect(() => {
-    setValues([]);
-    dispatch(setfilters({ rating: [] }));
-    resetfun(false);
+    if (reset) {
+      setValues([]);
+      dispatch(setfilters({ rating: [] }));
+      resetfun(false);
+    }
   }, [reset]);
 
   useEffect(() => {
@@ -39,7 +41,7 @@ const Rating = ({ reset = false, resetfun }) => {
     console.log(reqRating);
     setValues(reqRating);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  });
+  }, []);
 
   const renderStars = (count) => {
     const stars = [];

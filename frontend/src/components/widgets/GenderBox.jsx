@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setfilters } from "../../slices/filterSlice";
 
 const CheckboxGroup = ({ reset = false, resetfun }) => {
-  console.log(reset);
+  // console.log(reset);
   const dispatch = useDispatch();
   const appliedFilters = useSelector((state) => state.appliedFilters);
   // console.log(appliedFilters[0].gender);
@@ -17,9 +17,11 @@ const CheckboxGroup = ({ reset = false, resetfun }) => {
   ];
 
   useEffect(() => {
-    setSelectedCheckboxes([]);
-    dispatch(setfilters({ gender: [] }));
-    resetfun(false);
+    if (reset) {
+      setSelectedCheckboxes([]);
+      dispatch(setfilters({ gender: [] }));
+      resetfun(false);
+    }
   }, [reset]);
 
   useEffect(() => {

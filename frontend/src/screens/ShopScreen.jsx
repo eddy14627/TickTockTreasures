@@ -12,19 +12,39 @@ import Loader from "../components/Loader";
 import Message from "../components/widgets/Message";
 import Paginate from "../components/Paginate";
 import Meta from "../components/Meta";
-import { useFiltersAppiliedMutation } from "../slices/filterApiSlice";
-import { useSelector } from "react-redux";
+import {
+  useFiltersAppiliedMutation,
+  useGetAvailableBrandNameQuery,
+} from "../slices/filterApiSlice";
+import { useDispatch, useSelector } from "react-redux";
 import Rating from "../components/widgets/RatingBox";
+import { resetFilters } from "../slices/filterSlice";
 
 const ShopScreen = () => {
   const { pageNumber = 1, keyword = "" } = useParams();
   const [isFilterApplied, setIsFilterApplied] = useState(true);
   const [isReset, setIsReset] = useState(false);
   const [data, setData] = useState(null);
+  const [brandOptions, setBrandOptions] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const { data: brandData } = useGetAvailableBrandNameQuery();
+
+  useEffect(() => {
+    const options = [];
+    if (brandData) {
+      for (let i = 0; i < brandData.brandNameList.length; i++) {
+        options.push({ id: i, label: brandData.brandNameList[i] });
+      }
+    }
+    console.log(options);
+    setBrandOptions(options);
+  }, [brandData]);
+
   const filters = useSelector((state) => state.appliedFilters);
 
   const [filtersAppilied, { isLoading: loadingUpdate }] =
@@ -57,9 +77,10 @@ const ShopScreen = () => {
     setIsFilterApplied(true);
   };
   const handelApplyReset = () => {
-    setIsReset(true);
+    // setIsReset(true);
     setIsOpen(!isOpen);
     setIsFilterApplied(true);
+    dispatch(resetFilters());
   };
 
   const handlePageChange = (page) => {
@@ -100,7 +121,11 @@ const ShopScreen = () => {
           </Row>
           <Row style={{ marginTop: "25px" }}>
             <strong>Brands</strong>
-            <BrandListBox reset={isReset} resetfun={setIsReset} />
+            <BrandListBox
+              options={brandOptions}
+              reset={isReset}
+              resetfun={setIsReset}
+            />
           </Row>
 
           <Row style={{ marginTop: "25px" }}>
