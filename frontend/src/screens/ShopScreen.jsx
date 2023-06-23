@@ -25,6 +25,7 @@ const ShopScreen = () => {
   console.log(keyword);
   // const [appliedKeyword, setAppliedKeyword] = useState(keyword);
   const [data, setData] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
   const [brandOptions, setBrandOptions] = useState([]);
   const [error, setError] = useState(null);
 
@@ -40,7 +41,6 @@ const ShopScreen = () => {
         options.push({ id: i, label: brandData.brandNameList[i] });
       }
     }
-    console.log(options);
     setBrandOptions(options);
   }, [brandData]);
 
@@ -51,6 +51,7 @@ const ShopScreen = () => {
     useFiltersAppiliedMutation();
 
   const fetchData = async () => {
+    setIsLoading(true);
     const response = await filtersAppilied({
       filters: filters,
       keyword: keyword,
@@ -58,6 +59,7 @@ const ShopScreen = () => {
     });
     setData(response.data);
     setError(response.error);
+    setIsLoading(false);
   };
 
   useEffect(() => {
@@ -126,7 +128,7 @@ const ShopScreen = () => {
         </Offcanvas.Body>
       </Offcanvas>
       <>
-        {loadingUpdate ? (
+        {isLoading ? (
           <Loader />
         ) : error ? (
           <Message variant="danger">
