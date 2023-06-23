@@ -16,7 +16,7 @@ export const fetchDataByFilters = asyncHandler(async (req, res) => {
       }
     : {};
   let query = {};
-
+  console.log(req.query);
   filters &&
     filters.forEach((filter) => {
       const fieldName = Object.keys(filter)[0];

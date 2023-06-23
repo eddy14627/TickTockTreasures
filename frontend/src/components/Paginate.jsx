@@ -6,7 +6,7 @@ const Paginate = ({
   page,
   isAdmin = false,
   keyword = "",
-  isShop = false,
+  // isShop = false,
   onPageChange,
 }) => {
   return (
@@ -17,19 +17,19 @@ const Paginate = ({
             key={x + 1}
             to={
               !isAdmin
-                ? keyword
-                  ? isShop
-                    ? `/shop/search/${keyword}/page/${x + 1}`
-                    : `/search/${keyword}/page/${x + 1}`
-                  : isShop
-                  ? `/shop/page/${x + 1}`
-                  : `/page/${x + 1}`
-                : `/admin/productlist/${x + 1}`
+                ? keyword && keyword !== ""
+                  ? // ? isShop
+                    `/shop/search/${keyword}/page/${x + 1}`
+                  : // : `/search/${keyword}/page/${x + 1}`
+                    // : isShop
+                    `/shop/page/${x + 1}`
+                : // : `/page/${x + 1}`
+                  `/admin/productlist/${x + 1}`
             }
           >
             <Pagination.Item
               active={x + 1 === page}
-              onClick={() => onPageChange(x + 1)}
+              // onClick={() => onPageChange(x + 1)}
             >
               {x + 1}
             </Pagination.Item>

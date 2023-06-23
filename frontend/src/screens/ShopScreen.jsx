@@ -18,14 +18,14 @@ import {
 } from "../slices/filterApiSlice";
 import { useDispatch, useSelector } from "react-redux";
 import Rating from "../components/widgets/RatingBox";
-import { resetFilters } from "../slices/filterSlice";
+import { resetFilters, setfilters } from "../slices/filterSlice";
 
 const ShopScreen = () => {
-  const { pageNumber = 1, keyword = "" } = useParams();
-  const [isFilterApplied, setIsFilterApplied] = useState(true);
+  let { pageNumber = 1, keyword = "" } = useParams();
+  console.log(keyword);
+  // const [appliedKeyword, setAppliedKeyword] = useState(keyword);
   const [data, setData] = useState(null);
   const [brandOptions, setBrandOptions] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
   const navigate = useNavigate();
@@ -46,6 +46,7 @@ const ShopScreen = () => {
 
   const filters = useSelector((state) => state.appliedFilters);
 
+  // eslint-disable-next-line
   const [filtersAppilied, { isLoading: loadingUpdate }] =
     useFiltersAppiliedMutation();
 
@@ -56,15 +57,18 @@ const ShopScreen = () => {
       pageNumber: pageNumber,
     });
     setData(response.data);
-    setIsLoading(false);
     setError(response.error);
-    setIsFilterApplied(false);
   };
 
   useEffect(() => {
-    if (isFilterApplied) fetchData();
+    // setAppliedKeyword(keyword);
+    // if (isFilterApplied)
+    // if (appliedKeyword === keyword) {
+    fetchData();
+    // }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isFilterApplied]);
+    // }, [isFilterApplied]);
+  }, [keyword, pageNumber]);
 
   const [isOpen, setIsOpen] = useState(false);
   const toggleDrawer = () => {
@@ -73,16 +77,24 @@ const ShopScreen = () => {
 
   const handelApplyFilter = () => {
     setIsOpen(!isOpen);
-    setIsFilterApplied(true);
+    navigate(`/shop`);
+    // keyword = "";
+    // setAppliedKeyword("");
+    // setIsFilterApplied(true);
+    fetchData();
   };
   const handelApplyReset = () => {
     setIsOpen(!isOpen);
-    setIsFilterApplied(true);
+    navigate(`/shop`);
+    // setAppliedKeyword("");
+    // keyword = "";
+    // setIsFilterApplied(true);
     dispatch(resetFilters());
+    fetchData();
   };
 
   const handlePageChange = (page) => {
-    setIsFilterApplied(true);
+    // setIsFilterApplied(true);
     navigate(`/shop/page/${page}`);
   };
 
@@ -131,7 +143,7 @@ const ShopScreen = () => {
         </Offcanvas.Body>
       </Offcanvas>
       <>
-        {isLoading ? (
+        {loadingUpdate ? (
           <Loader />
         ) : error ? (
           <Message variant="danger">
@@ -158,7 +170,7 @@ const ShopScreen = () => {
               pages={data && data.pages}
               page={data && data.page}
               keyword={keyword}
-              onClick={handlePageChange}
+              // onClick={handlePageChange}
               onPageChange={handlePageChange}
               isShop={true}
             />

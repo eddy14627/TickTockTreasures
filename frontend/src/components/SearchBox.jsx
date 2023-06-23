@@ -2,9 +2,12 @@ import React, { useState } from "react";
 import { Form, Button } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import { resetFilters } from "../slices/filterSlice";
+import { useDispatch } from "react-redux";
 
 const SearchBox = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const { keyword: urlKeyword } = useParams();
   const [keyword, setKeyword] = useState(urlKeyword);
 
@@ -14,8 +17,10 @@ const SearchBox = () => {
       /* The trim() method is a built-in JavaScript string
       method that removes whitespace characters from both ends
       of a string. */
+      dispatch(resetFilters());
       navigate(`/shop/search/${keyword.trim()}`);
-      setKeyword("");
+
+      // setKeyword("");
     } else {
       navigate("/");
     }
