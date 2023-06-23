@@ -61,13 +61,7 @@ const ShopScreen = () => {
   };
 
   useEffect(() => {
-    // setAppliedKeyword(keyword);
-    // if (isFilterApplied)
-    // if (appliedKeyword === keyword) {
     fetchData();
-    // }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    // }, [isFilterApplied]);
   }, [keyword, pageNumber]);
 
   const [isOpen, setIsOpen] = useState(false);
@@ -78,24 +72,13 @@ const ShopScreen = () => {
   const handelApplyFilter = () => {
     setIsOpen(!isOpen);
     navigate(`/shop`);
-    // keyword = "";
-    // setAppliedKeyword("");
-    // setIsFilterApplied(true);
     fetchData();
   };
   const handelApplyReset = () => {
     setIsOpen(!isOpen);
     navigate(`/shop`);
-    // setAppliedKeyword("");
-    // keyword = "";
-    // setIsFilterApplied(true);
     dispatch(resetFilters());
     fetchData();
-  };
-
-  const handlePageChange = (page) => {
-    // setIsFilterApplied(true);
-    navigate(`/shop/page/${page}`);
   };
 
   return (
@@ -165,14 +148,10 @@ const ShopScreen = () => {
             ) : (
               <Message variant="info">No products found</Message>
             )}
-            {/* {console.log(data)} */}
             <Paginate
               pages={data && data.pages}
               page={data && data.page}
               keyword={keyword}
-              // onClick={handlePageChange}
-              onPageChange={handlePageChange}
-              isShop={true}
             />
           </>
         )}
