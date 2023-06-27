@@ -107,7 +107,7 @@ const RegisterScreen = () => {
             </Button>
           </Col>
         </Row>
-        <Row className="py-3 justify-content-center">Or</Row>
+        {/* <Row className="py-3 justify-content-center">Or</Row>
 
         <Row className="py-3 justify-content-center">
           <GoogleAuthButton
@@ -119,7 +119,7 @@ const RegisterScreen = () => {
             rounded
             className="col-12"
           />
-        </Row>
+        </Row> */}
 
         {isLoading && <Loader />}
       </Form>
