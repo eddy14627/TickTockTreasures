@@ -22,7 +22,7 @@ import { resetFilters, setfilters } from "../slices/filterSlice";
 
 const ShopScreen = () => {
   let { pageNumber = 1, keyword = "" } = useParams();
-  console.log(keyword);
+  // console.log(keyword);
   // const [appliedKeyword, setAppliedKeyword] = useState(keyword);
   const [data, setData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -62,25 +62,21 @@ const ShopScreen = () => {
     setIsLoading(false);
   };
 
-  useEffect(() => {
-    fetchData();
-  }, [keyword, pageNumber]);
-
   const [isOpen, setIsOpen] = useState(false);
   const toggleDrawer = () => {
     setIsOpen(!isOpen);
   };
 
+  useEffect(() => {
+    fetchData();
+  }, [keyword, pageNumber, isOpen]);
+
   const handelApplyFilter = () => {
     setIsOpen(!isOpen);
-    navigate(`/shop`);
-    fetchData();
   };
   const handelApplyReset = () => {
     setIsOpen(!isOpen);
-    navigate(`/shop`);
     dispatch(resetFilters());
-    fetchData();
   };
 
   return (

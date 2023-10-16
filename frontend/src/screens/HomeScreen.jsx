@@ -9,6 +9,7 @@ import ProductCarousel from "../components/ProductCarousel";
 import Meta from "../components/Meta";
 import "../utils/extra_css.css";
 import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 
 const HomeScreen = () => {
   const { pageNumber, keyword } = useParams();
@@ -23,7 +24,9 @@ const HomeScreen = () => {
     keyword,
     pageNumber,
   });
-
+  const stateInfo = useSelector((state) => state);
+  console.log("state Info : ", stateInfo);
+  console.log("data : ", data);
   useEffect(() => {
     if (data && data.products) {
       const productByLatest = data.products.slice(0, 8);
@@ -84,9 +87,16 @@ const HomeScreen = () => {
           <Row className="mb-4">
             <div className="horizontal-slider">
               <div className="slider-container">
-                <div className="slider-wrapper">
+                <div className="slider-wrapper" style={{ margin: "0 -10px" }}>
                   {latest.map((product) => (
-                    <Col key={product._id} sm={12} md={6} lg={4} xl={3}>
+                    <Col
+                      key={product._id}
+                      sm={12}
+                      md={6}
+                      lg={4}
+                      xl={3}
+                      style={{ padding: "0 10px" }}
+                    >
                       <Product product={product} />
                     </Col>
                   ))}
@@ -94,13 +104,21 @@ const HomeScreen = () => {
               </div>
             </div>
           </Row>
+
           <h1>Best Seller</h1>
           <Row className="mb-4">
             <div className="horizontal-slider">
               <div className="slider-container">
-                <div className="slider-wrapper">
+                <div className="slider-wrapper" style={{ margin: "0 -10px" }}>
                   {bestSeller.map((product) => (
-                    <Col key={product._id} sm={12} md={6} lg={4} xl={3}>
+                    <Col
+                      key={product._id}
+                      sm={12}
+                      md={6}
+                      lg={4}
+                      xl={3}
+                      style={{ padding: "0 10px" }}
+                    >
                       <Product product={product} />
                     </Col>
                   ))}
@@ -112,9 +130,16 @@ const HomeScreen = () => {
           <Row className="mb-4">
             <div className="horizontal-slider">
               <div className="slider-container">
-                <div className="slider-wrapper">
+                <div className="slider-wrapper" style={{ margin: "0 -10px" }}>
                   {smartWatches.map((product) => (
-                    <Col key={product._id} sm={12} md={6} lg={4} xl={3}>
+                    <Col
+                      key={product._id}
+                      sm={12}
+                      md={6}
+                      lg={4}
+                      xl={3}
+                      style={{ padding: "0 10px" }}
+                    >
                       <Product product={product} />
                     </Col>
                   ))}
@@ -122,13 +147,22 @@ const HomeScreen = () => {
               </div>
             </div>
           </Row>
+
           <h1>luxury Watches</h1>
+
           <Row className="mb-4">
             <div className="horizontal-slider">
               <div className="slider-container">
-                <div className="slider-wrapper">
+                <div className="slider-wrapper" style={{ margin: "0 -10px" }}>
                   {luxuryWatches.map((product) => (
-                    <Col key={product._id} sm={12} md={6} lg={4} xl={3}>
+                    <Col
+                      key={product._id}
+                      sm={12}
+                      md={6}
+                      lg={4}
+                      xl={3}
+                      style={{ padding: "0 10px" }}
+                    >
                       <Product product={product} />
                     </Col>
                   ))}
@@ -137,12 +171,20 @@ const HomeScreen = () => {
             </div>
           </Row>
           <h1>Casual Watches</h1>
+
           <Row className="mb-4">
             <div className="horizontal-slider">
               <div className="slider-container">
-                <div className="slider-wrapper">
+                <div className="slider-wrapper" style={{ margin: "0 -10px" }}>
                   {casualWatches.map((product) => (
-                    <Col key={product._id} sm={12} md={6} lg={4} xl={3}>
+                    <Col
+                      key={product._id}
+                      sm={12}
+                      md={6}
+                      lg={4}
+                      xl={3}
+                      style={{ padding: "0 10px" }}
+                    >
                       <Product product={product} />
                     </Col>
                   ))}
@@ -151,12 +193,20 @@ const HomeScreen = () => {
             </div>
           </Row>
           <h1>Sports Watches</h1>
+
           <Row className="mb-4">
             <div className="horizontal-slider">
               <div className="slider-container">
-                <div className="slider-wrapper">
-                  {sportsWatches.map((product) => (
-                    <Col key={product._id} sm={12} md={6} lg={4} xl={3}>
+                <div className="slider-wrapper" style={{ margin: "0 -10px" }}>
+                  {bestSeller.map((product) => (
+                    <Col
+                      key={product._id}
+                      sm={12}
+                      md={6}
+                      lg={4}
+                      xl={3}
+                      style={{ padding: "0 10px" }}
+                    >
                       <Product product={product} />
                     </Col>
                   ))}

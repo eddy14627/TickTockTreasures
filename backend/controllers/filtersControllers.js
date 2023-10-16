@@ -55,6 +55,5 @@ export const fetchDataByFilters = asyncHandler(async (req, res) => {
 export const fetchBrandNameList = asyncHandler(async (req, res) => {
   const products = await Product.find();
   const brandNameList = [...new Set(products.map((product) => product.brand))];
-  // console.log(brandNameList, "brandList");
   return res.status(200).json({ brandNameList });
 });

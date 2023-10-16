@@ -37,11 +37,11 @@ const ProductScreen = () => {
   const [qty, setQty] = useState(1);
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState("");
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
-
+  const [productAdded, setProductsAdded] = useState(false);
   const addToCartHandler = () => {
     dispatch(addToCart({ ...product, qty }));
-    navigate("/cart");
+    setProductsAdded(true);
+    // navigate("/cart");
   };
 
   const {
@@ -51,11 +51,19 @@ const ProductScreen = () => {
     error,
   } = useGetProductDetailsQuery(productId);
 
-  const [filtersAppilied, { isLoading: loadingUpdate }] =
-    useFiltersAppiliedMutation();
+  console.log(product);
+
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  // used for related product
+  const [filtersAppilied] = useFiltersAppiliedMutation();
 
   const fetchData = async () => {
     if (product) {
+      // const initialImageIndex = product.image.findIndex(
+      //   (img) => img === product.profileImage
+      // );
+      // setCurrentImageIndex(initialImageIndex);
       const response = await filtersAppilied({
         filters: [
           { brand: [product.brand] },
@@ -67,6 +75,7 @@ const ProductScreen = () => {
   };
   useEffect(() => {
     fetchData();
+    window.scrollTo(0, 0);
   }, [product]);
 
   const { userInfo } = useSelector((state) => state.auth);
@@ -88,6 +97,7 @@ const ProductScreen = () => {
     } catch (err) {
       toast.error(err?.data?.message || err.error);
     }
+    window.scrollTo(0, 0);
   };
 
   const nextImage = () => {
@@ -100,6 +110,24 @@ const ProductScreen = () => {
     setCurrentImageIndex((prevIndex) =>
       prevIndex === 0 ? product.image.length - 1 : prevIndex - 1
     );
+  };
+
+  // description
+  const [showFullDescription, setShowFullDescription] = useState(false);
+
+  const truncateDescription = (description, words) => {
+    const wordArray = description.split(" ");
+    const sendingDescription = wordArray.slice(0, words);
+    return sendingDescription.join(" ");
+  };
+
+  const descriptionToShow = (description) => {
+    return truncateDescription(description, 40);
+  };
+
+  const toggleDescription = () => {
+    setShowFullDescription(!showFullDescription);
+    window.scroll(0, 0);
   };
 
   return (
@@ -123,7 +151,7 @@ const ProductScreen = () => {
             >
               <div>
                 {product.image.length > 1 && (
-                  <div className="arrow-buttons d-flex mx-auto">
+                  <div className="arrow-buttons d-flex mx-auto my-5">
                     <button
                       className="arrow-button left-arrow mx-auto border-0"
                       onClick={previousImage}
@@ -163,7 +191,16 @@ const ProductScreen = () => {
                 </ListGroup.Item>
                 <ListGroup.Item>Price: ${product.price}</ListGroup.Item>
                 <ListGroup.Item>
-                  Description: {product.description}
+                  <div>
+                    <strong>Description: </strong>
+                    {showFullDescription
+                      ? product.description
+                      : descriptionToShow(product.description)}
+
+                    <Button variant="link" onClick={toggleDescription}>
+                      {showFullDescription ? "Show Less" : "...Show More"}
+                    </Button>
+                  </div>
                 </ListGroup.Item>
               </ListGroup>
             </Col>
@@ -215,10 +252,10 @@ const ProductScreen = () => {
                     <Button
                       className="btn-block"
                       type="button"
-                      disabled={product.countInStock === 0}
+                      disabled={product.countInStock === 0 || productAdded}
                       onClick={addToCartHandler}
                     >
-                      Add To Cart
+                      {productAdded ? "Already Added to Cart" : "Add To Cart"}
                     </Button>
                   </ListGroup.Item>
                 </ListGroup>
@@ -293,11 +330,18 @@ const ProductScreen = () => {
             <div className="horizontal-slider">
               <h2>Related Products</h2>
               <div className="slider-container">
-                <div className="slider-wrapper">
+                <div className="slider-wrapper" style={{ margin: "0 -10px" }}>
                   {products.map((product) => (
-                    <div key={product._id} className="slide">
+                    <Col
+                      key={product._id}
+                      sm={12}
+                      md={6}
+                      lg={4}
+                      xl={3}
+                      style={{ padding: "0 10px" }}
+                    >
                       <Product product={product} />
-                    </div>
+                    </Col>
                   ))}
                 </div>
               </div>

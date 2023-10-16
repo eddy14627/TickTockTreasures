@@ -37,7 +37,7 @@ const Header = () => {
   };
 
   return (
-    <header>
+    <header style={{ position: "sticky", top: "0", zIndex: "100" }}>
       <Navbar bg="light" variant="light" expand="lg" collapseOnSelect>
         <Container>
           <LinkContainer to="/">

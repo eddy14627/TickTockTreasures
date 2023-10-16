@@ -59,3 +59,12 @@
 .inactive-star {
   color: gray; /* Change the color to your desired inactive star color */
 }
+
+.transition-image {
+  transition: opacity 0.5s ease-in-out;
+  opacity: 1;
+}
+
+.transition-image.fade-out {
+  opacity: 0;
+}

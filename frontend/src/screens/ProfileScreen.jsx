@@ -18,6 +18,8 @@ const ProfileScreen = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
 
   const { userInfo } = useSelector((state) => state.auth);
+  const stateInfo = useSelector((state) => state);
+  console.log("state Info : ", stateInfo);
 
   const { data: orders, isLoading, error } = useGetMyOrdersQuery();
 
