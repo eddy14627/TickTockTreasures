@@ -27,10 +27,15 @@
 
 .horizontal-slider .slider-container {
   overflow-x: scroll;
+  scrollbar-width: none;
 }
 
 .horizontal-slider .slider-wrapper {
   display: flex;
+}
+.slider-wrapper {
+  display: none;
+  scrollbar-width: none;
 }
 
 .horizontal-slider .slide {
