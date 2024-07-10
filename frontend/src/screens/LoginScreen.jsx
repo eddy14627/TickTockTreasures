@@ -88,7 +88,7 @@ const LoginScreen = () => {
         <Link to={"/passwordChange"}>forget Password ?</Link>
       </Row>
 
-      <Row className="py-3 justify-content-center">Or</Row>
+      {/* <Row className="py-3 justify-content-center">Or</Row>
 
       <Row className="py-3 justify-content-center">
         <GoogleAuthButton
@@ -100,7 +100,7 @@ const LoginScreen = () => {
           rounded
           className="col-12"
         />
-      </Row>
+      </Row> */}
 
       <Row className="py-3">
         <Col>
