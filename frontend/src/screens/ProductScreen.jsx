@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { AiOutlineLeft, AiOutlineRight } from "react-icons/ai";
@@ -17,7 +17,6 @@ import { toast } from "react-toastify";
 import {
   useGetProductDetailsQuery,
   useCreateReviewMutation,
-  useGetProductsQuery,
 } from "../slices/productsApiSlice";
 import Rating from "../components/Rating";
 import Loader from "../components/Loader";
@@ -26,23 +25,26 @@ import Meta from "../components/Meta";
 import { addToCart } from "../slices/cartSlice";
 import Product from "../components/Product";
 import { useFiltersAppiliedMutation } from "../slices/filterApiSlice";
+import { useAddToCartApiMutation } from "../slices/cartApiSlice";
 
 const ProductScreen = () => {
   const { id: productId } = useParams();
-  const [products, setProducts] = useState([]);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
+  const [addToCartApi] = useAddToCartApiMutation();
+
+  const { userInfo } = useSelector((state) => state.auth);
+
+  // this products is used for getting related products
+  const [products, setProducts] = useState([]);
 
   const [qty, setQty] = useState(1);
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState("");
   const [productAdded, setProductsAdded] = useState(false);
-  const addToCartHandler = () => {
-    dispatch(addToCart({ ...product, qty }));
-    setProductsAdded(true);
-    // navigate("/cart");
-  };
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   const {
     data: product,
@@ -53,7 +55,27 @@ const ProductScreen = () => {
 
   console.log(product);
 
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const handleAddToCart = async () => {
+    const response = await addToCartApi({
+      quantity: qty,
+      productId: productId,
+    }).unwrap();
+
+    if (response) {
+      // dispatch(setCart(response.cartItems)); // Update local state
+      dispatch(addToCart({ ...product, qty })); // this will have info about how many product is added of this type
+      setProductsAdded(true);
+    }
+  };
+
+  const addToCartHandler = () => {
+    // add to cart if user is logged in
+    if (userInfo) {
+      handleAddToCart();
+    } else {
+      navigate(`/login?redirect=${location.pathname}`);
+    }
+  };
 
   // used for related product
   const [filtersAppilied] = useFiltersAppiliedMutation();
@@ -73,12 +95,11 @@ const ProductScreen = () => {
       setProducts(response.data.products);
     }
   };
+
   useEffect(() => {
     fetchData();
     window.scrollTo(0, 0);
   }, [product]);
-
-  const { userInfo } = useSelector((state) => state.auth);
 
   const [createReview, { isLoading: loadingProductReview }] =
     useCreateReviewMutation();

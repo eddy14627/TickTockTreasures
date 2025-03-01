@@ -8,8 +8,9 @@ import FormContainer from "../components/FormContainer";
 import { useRegisterMutation } from "../slices/usersApiSlice";
 import { setCredentials } from "../slices/authSlice";
 import { toast } from "react-toastify";
-import GoogleAuthButton from "../components/widgets/GoogleAuthButton";
+// import GoogleAuthButton from "../components/widgets/GoogleAuthButton";
 import { resetFilters } from "../slices/filterSlice";
+import { clearCartItems } from "../slices/cartSlice";
 
 const RegisterScreen = () => {
   const [name, setName] = useState("");
@@ -44,6 +45,7 @@ const RegisterScreen = () => {
         const res = await register({ name, email, password }).unwrap();
         dispatch(setCredentials({ ...res }));
         dispatch(resetFilters());
+        dispatch(clearCartItems());
         navigate(redirect);
       } catch (err) {
         toast.error(err?.data?.message || err.error);

@@ -12,20 +12,50 @@ import {
 import { FaTrash } from "react-icons/fa";
 import Message from "../components/widgets/Message";
 import { addToCart, removeFromCart } from "../slices/cartSlice";
+import {
+  useAddToCartApiMutation,
+  useGetCartItemsApiQuery,
+  useRemoveFromCartApiMutation,
+} from "../slices/cartApiSlice";
+import Loader from "../components/Loader";
 
 const CartScreen = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const cart = useSelector((state) => state.cart);
-  const { cartItems } = cart;
+  const { userInfo } = useSelector((state) => state.auth);
+  const { cartItems } = useSelector((state) => state.cart);
+  const [removeFromCartApi] = useRemoveFromCartApiMutation();
+  const [addToCartApi] = useAddToCartApiMutation();
+  const { isLoading } = useGetCartItemsApiQuery(userInfo ? userInfo._id : "");
 
   const addToCartHandler = async (product, qty) => {
-    dispatch(addToCart({ ...product, qty }));
+    console.log(product);
+
+    const response = await addToCartApi({
+      quantity: qty,
+      productId: product._id,
+    }).unwrap();
+
+    if (response) {
+      // dispatch(setCart(response.cartItems)); // Update local state
+      dispatch(addToCart({ ...product, qty }));
+    }
+  };
+
+  const handleRemoveFromCart = async (id) => {
+    const response = await removeFromCartApi({
+      userId: userInfo._id,
+      productId: id,
+    }).unwrap();
+
+    if (response) {
+      dispatch(removeFromCart(id));
+    }
   };
 
   const removeFromCartHandler = (id) => {
-    dispatch(removeFromCart(id));
+    handleRemoveFromCart(id);
   };
 
   const checkoutHandler = () => {
@@ -36,7 +66,9 @@ const CartScreen = () => {
     <Row>
       <Col md={8}>
         <h1 style={{ marginBottom: "20px" }}>Shopping Cart</h1>
-        {cartItems.length === 0 ? (
+        {isLoading ? (
+          <Loader />
+        ) : cartItems.length === 0 ? (
           <Message>
             Your cart is empty <Link to="/">Go Back</Link>
           </Message>

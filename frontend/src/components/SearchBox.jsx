@@ -19,7 +19,7 @@ const SearchBox = () => {
       of a string. */
       dispatch(resetFilters());
       navigate(`/shop/search/${keyword.trim()}`);
-
+      setKeyword("");
       // setKeyword("");
     } else {
       navigate("/");

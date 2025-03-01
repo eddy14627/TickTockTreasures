@@ -8,3 +8,4 @@ export const FILTERS_URL = "/api/filters";
 export const ORDERS_URL = "/api/orders";
 export const PAID_URL = "/api/pay";
 export const PAYPAL_URL = "/api/config/paypal";
+export const CART_URL = "/api/cart";
