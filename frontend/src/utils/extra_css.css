@@ -335,26 +335,3 @@
 .carousel-video-description {
   font-size: 1.2rem;
 }
-
-.thumbnail-gallery {
-  display: flex;
-  flex-direction: column;
-}
-
-.thumbnail-item {
-  border: 1px solid #ddd;
-  padding: 5px;
-}
-
-.thumbnail-item.active-thumbnail {
-  border: 2px solid #007bff; /* Highlight active thumbnail */
-}
-
-.main-image-container {
-  width: 100%;
-}
-
-.main-product-image {
-  max-width: 100%;
-  height: auto;
-}

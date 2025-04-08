@@ -48,6 +48,14 @@ enables you to access this data via req.cookies.
 app.use(cookieParser());
 
 app.use(cors());
+
+app.use(
+  cors({
+    origin: [process.env.URL],
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true,
+  })
+);
 app.use((req, res, next) => {
   res.setHeader("Cross-Origin-Opener-Policy", "same-origin");
   res.setHeader("Cross-Origin-Embedder-Policy", "require-corp");
