@@ -21,7 +21,7 @@ const Footer = () => {
           {/* Brand & Tagline */}
           <Col md={3} className="mb-4">
             <h4 className="fw-bold">⏳ TickTockTreasure</h4>
-            <p>Your one-stop shop for luxury and classic watches.</p>
+            <p>Your one-stop shop for luxury and classic watches in India.</p>
           </Col>
 
           {/* Quick Links */}
@@ -55,13 +55,13 @@ const Footer = () => {
           <Col md={3} className="mb-4">
             <h5 className="fw-bold">Get in Touch</h5>
             <p>
-              <FaMapMarkerAlt /> 123 Watch Street, Time City
+              <FaMapMarkerAlt /> 456 Watch Lane, Bengaluru, Karnataka - 560001
             </p>
             <p>
-              <FaPhone /> +1 (123) 456-7890
+              <FaPhone /> +91 98765 43210
             </p>
             <p>
-              <FaEnvelope /> support@ticktocktreasure.com
+              <FaEnvelope /> support@ticktocktreasure.in
             </p>
           </Col>
 

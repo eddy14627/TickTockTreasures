@@ -9,17 +9,17 @@ import {
   deleteUser,
   getUserById,
   updateUser,
-  authUserWithGoogle,
-  registerUserWithGoogle,
+  // authUserWithGoogle,
+  // registerUserWithGoogle,
 } from "../controllers/userController.js";
 import { protect, admin } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
 router.route("/").post(registerUser).get(protect, admin, getUsers);
-router.post("/googleRegister", registerUserWithGoogle);
+// router.post("/googleRegister", registerUserWithGoogle);
 router.post("/auth", authUser);
-router.post("/auth/google", authUserWithGoogle);
+// router.post("/auth/google", authUserWithGoogle);
 router.post("/logout", logoutUser);
 
 router

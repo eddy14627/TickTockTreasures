@@ -23,7 +23,6 @@ const getCartItems = asyncHandler(async (req, res) => {
 // @access  Private
 const addToCart = asyncHandler(async (req, res) => {
   const { productId, quantity } = req.body;
-  console.log("hi..... this is backecd ", productId, " ", quantity);
   const product = await Product.findById(productId);
   if (!product) {
     res.status(404);
@@ -35,7 +34,6 @@ const addToCart = asyncHandler(async (req, res) => {
   if (!cart) {
     cart = new Cart({ user: req.user._id, items: [] });
   }
-  console.log("user Id : ", req.user._id);
 
   const itemIndex = cart.items.findIndex(
     (item) => item.product.toString() === productId

@@ -27,7 +27,6 @@ const Header = () => {
     userInfo ? userInfo._id : ""
   );
 
-  // Fetch cart items when the component mounts
   useEffect(() => {
     dispatch(clearCartItems());
     if (initialCartItems && userInfo) {
@@ -36,7 +35,6 @@ const Header = () => {
     }
   }, [initialCartItems, dispatch, userInfo]);
 
-  // Logout function with confirmation
   const [logoutApiCall] = useLogoutMutation();
   const logoutHandler = async () => {
     const result = await Swal.fire({
@@ -62,12 +60,19 @@ const Header = () => {
     }
   };
 
-  // Highlight active menu
   const isActive = (path) => (location.pathname === path ? "active" : "");
 
   return (
-    <header style={{ position: "sticky", top: "0", zIndex: "100" }}>
-      <Navbar bg="light" variant="light" expand="lg" collapseOnSelect>
+    <header
+      className="header"
+      style={{
+        position: "sticky",
+        top: "0",
+        zIndex: "100",
+        backgroundColor: "transparent",
+      }}
+    >
+      <Navbar bg="transparent" variant="light" expand="lg" collapseOnSelect>
         <Container>
           <LinkContainer to="/">
             <Navbar.Brand className="brand-hover">
@@ -81,12 +86,12 @@ const Header = () => {
               <SearchBox />
               <LinkContainer to="/shop">
                 <Nav.Link className={`nav-link ${isActive("/shop")}`}>
-                  <BsShop /> Shop
+                  <BsShop size={20} color="#333" /> Shop
                 </Nav.Link>
               </LinkContainer>
               <LinkContainer to="/cart">
                 <Nav.Link className={`nav-link ${isActive("/cart")}`}>
-                  <FaShoppingCart /> Cart
+                  <FaShoppingCart size={20} color="#333" /> Cart
                   {cartItems.length > 0 && (
                     <Badge pill bg="success" className="cart-badge">
                       {cartItems.reduce((a, c) => a + c.qty, 0)}
@@ -109,7 +114,7 @@ const Header = () => {
               ) : (
                 <LinkContainer to="/login">
                   <Nav.Link className={`nav-link ${isActive("/login")}`}>
-                    <FaUser /> Sign In
+                    <FaUser size={20} color="#333" /> Sign In
                   </Nav.Link>
                 </LinkContainer>
               )}

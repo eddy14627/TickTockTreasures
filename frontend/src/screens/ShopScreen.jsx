@@ -28,8 +28,6 @@ const ShopScreen = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [brandOptions, setBrandOptions] = useState([]);
   const [error, setError] = useState(null);
-
-  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const { data: brandData } = useGetAvailableBrandNameQuery();
@@ -46,7 +44,6 @@ const ShopScreen = () => {
 
   const filters = useSelector((state) => state.appliedFilters);
 
-  // eslint-disable-next-line
   const [filtersAppilied, { isLoading: loadingUpdate }] =
     useFiltersAppiliedMutation();
 
@@ -135,8 +132,6 @@ const ShopScreen = () => {
             <Meta />
             {data && data.count > 0 ? (
               <Row>
-                {/* Adjust the rendering based on the actual structure of the data */}
-
                 {data.products.map((product) => (
                   <Col key={product._id} sm={12} md={6} lg={4} xl={3}>
                     <Product product={product} />

@@ -20,9 +20,33 @@ connectDB();
 
 const app = express();
 
+/*
+Purpose: This middleware parses incoming requests with JSON payloads.​
+
+Use Case: When a client sends data in JSON format, such as 
+{"name": "John", "age": 30}, this middleware converts it into 
+a JavaScript object accessible via req.body in your route handlers. ​
+*/
 app.use(express.json());
+
+/*
+Purpose: This middleware parses incoming requests with URL-encoded payloads, 
+typically from HTML form submissions.​
+
+Use Case: When a user submits a form on a webpage, this middleware processes
+the form data, making it available in req.body as a JavaScript object. ​
+*/
 app.use(express.urlencoded({ extended: true }));
+
+/*
+Purpose: This middleware parses cookies attached to the client's request.
+
+Use Case: If your application uses cookies to store
+user preferences or session information, cookieParser()
+enables you to access this data via req.cookies.
+*/
 app.use(cookieParser());
+
 app.use(cors());
 app.use((req, res, next) => {
   res.setHeader("Cross-Origin-Opener-Policy", "same-origin");
@@ -37,6 +61,7 @@ app.use("/api/orders", orderRoutes);
 app.use("/api/filters", filtersRoutes);
 app.use("/api/forgetPassword", forgetRoutes);
 app.use("/api/upload/upload-cloudinary", cloudinaryUpload);
+
 app.get("/api/config/paypal", (req, res) =>
   res.send({ clientId: process.env.PAYPAL_CLIENT_ID })
 );

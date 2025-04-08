@@ -17,20 +17,20 @@ export const userApiSlice = apiSlice.injectEndpoints({
         body: data,
       }),
     }),
-    googleLogin: builder.mutation({
-      query: (data) => ({
-        url: `${USERS_URL}/auth/google`,
-        method: "POST",
-        body: data,
-      }),
-    }),
-    googleRegister: builder.mutation({
-      query: (data) => ({
-        url: `${USERS_URL}/googleRegister`,
-        method: "POST",
-        body: data,
-      }),
-    }),
+    // googleLogin: builder.mutation({
+    //   query: (data) => ({
+    //     url: `${USERS_URL}/auth/google`,
+    //     method: "POST",
+    //     body: data,
+    //   }),
+    // }),
+    // googleRegister: builder.mutation({
+    //   query: (data) => ({
+    //     url: `${USERS_URL}/googleRegister`,
+    //     method: "POST",
+    //     body: data,
+    //   }),
+    // }),
     logout: builder.mutation({
       query: () => ({
         url: `${USERS_URL}/logout`,
@@ -100,8 +100,8 @@ export const userApiSlice = apiSlice.injectEndpoints({
 
 export const {
   useLoginMutation,
-  useGoogleLoginMutation,
-  useGoogleRegisterMutation,
+  // useGoogleLoginMutation,
+  // useGoogleRegisterMutation,
   useLogoutMutation,
   useRegisterMutation,
   useProfileMutation,
