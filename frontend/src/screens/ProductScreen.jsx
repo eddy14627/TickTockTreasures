@@ -53,8 +53,6 @@ const ProductScreen = () => {
     error,
   } = useGetProductDetailsQuery(productId);
 
-  console.log(product);
-
   const handleAddToCart = async () => {
     const response = await addToCartApi({
       quantity: qty,
@@ -62,8 +60,7 @@ const ProductScreen = () => {
     }).unwrap();
 
     if (response) {
-      // dispatch(setCart(response.cartItems)); // Update local state
-      dispatch(addToCart({ ...product, qty })); // this will have info about how many product is added of this type
+      dispatch(addToCart({ ...product, qty }));
       setProductsAdded(true);
     }
   };
@@ -82,10 +79,6 @@ const ProductScreen = () => {
 
   const fetchData = async () => {
     if (product) {
-      // const initialImageIndex = product.image.findIndex(
-      //   (img) => img === product.profileImage
-      // );
-      // setCurrentImageIndex(initialImageIndex);
       const response = await filtersAppilied({
         filters: [
           { brand: [product.brand] },
@@ -121,16 +114,8 @@ const ProductScreen = () => {
     window.scrollTo(0, 0);
   };
 
-  const nextImage = () => {
-    setCurrentImageIndex((prevIndex) =>
-      prevIndex === product.image.length - 1 ? 0 : prevIndex + 1
-    );
-  };
-
-  const previousImage = () => {
-    setCurrentImageIndex((prevIndex) =>
-      prevIndex === 0 ? product.image.length - 1 : prevIndex - 1
-    );
+  const handleThumbnailClick = (index) => {
+    setCurrentImageIndex(index);
   };
 
   // description
@@ -166,40 +151,101 @@ const ProductScreen = () => {
         <>
           <Meta title={product.name} description={product.description} />
           <Row>
-            <Col
-              md={6}
-              className="position-relative d-flex justify-content-center"
-            >
-              <div>
-                {product.image.length > 1 && (
-                  <div className="arrow-buttons d-flex mx-auto my-5">
-                    <button
-                      className="arrow-button left-arrow mx-auto border-0"
-                      onClick={previousImage}
-                      style={{ background: "none", height: "auto" }}
+            <Col md={6} className="d-flex">
+              {/* Thumbnail Gallery */}
+              <div style={{ display: "flex", flexDirection: "row" }}>
+                {/* Thumbnails Column */}
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    marginRight: "20px",
+                  }}
+                >
+                  {product.image.map((img, index) => (
+                    <div
+                      key={index}
+                      style={{
+                        width: "60px",
+                        height: "60px",
+                        marginBottom: "10px",
+                        border:
+                          currentImageIndex === index
+                            ? "2px solid #000"
+                            : "1px solid #ccc",
+                        cursor: "pointer",
+                        padding: "2px",
+                        backgroundColor: "#f8f9fa",
+                      }}
+                      onClick={() => handleThumbnailClick(index)}
                     >
-                      <AiOutlineLeft />
-                    </button>
-                    <div className="product-image-container">
-                      <Image
-                        src={product.image[currentImageIndex]}
-                        alt={product.name}
-                        className="product-image"
+                      <img
+                        src={img}
+                        alt={`${product.name} - view ${index + 1}`}
+                        style={{
+                          width: "100%",
+                          height: "100%",
+                          objectFit: "contain",
+                        }}
                       />
                     </div>
-                    <button
-                      className="arrow-button right-arrow mx-auto border-0"
-                      onClick={nextImage}
-                      style={{ background: "none", height: "auto" }}
+                  ))}
+                </div>
+
+                {/* Main Image */}
+                <div
+                  className="main-image-container position-relative"
+                  style={{ flex: 1 }}
+                >
+                  <div
+                    style={{
+                      width: "550px",
+                      height: "100%",
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      backgroundColor: "#f8f9fa",
+                      position: "relative",
+                    }}
+                  >
+                    <Image
+                      src={product.image[currentImageIndex]}
+                      alt={product.name}
+                      style={{
+                        maxWidth: "100%",
+                        maxHeight: "100%",
+                        objectFit: "contain",
+                      }}
+                    />
+                    <div
+                      style={{
+                        position: "absolute",
+                        top: "10px",
+                        right: "10px",
+                        zIndex: 1,
+                        display: "flex",
+                        gap: "5px",
+                      }}
                     >
-                      <AiOutlineRight />
-                    </button>
+                      <Button
+                        variant="light"
+                        style={{ borderRadius: "50%", padding: "5px" }}
+                      >
+                        <i className="fas fa-expand-alt"></i>
+                      </Button>
+                      <Button
+                        variant="light"
+                        style={{ borderRadius: "50%", padding: "5px" }}
+                      >
+                        <i className="fas fa-share-alt"></i>
+                      </Button>
+                    </div>
                   </div>
-                )}
+                </div>
               </div>
             </Col>
 
-            <Col md={3}>
+            <Col md={6}>
               <ListGroup variant="flush">
                 <ListGroup.Item>
                   <h3>{product.name}</h3>
@@ -210,7 +256,7 @@ const ProductScreen = () => {
                     text={`${product.numReviews} reviews`}
                   />
                 </ListGroup.Item>
-                <ListGroup.Item>Price: ${product.price}</ListGroup.Item>
+                <ListGroup.Item>Price: ₹{product.price}</ListGroup.Item>
                 <ListGroup.Item>
                   <div>
                     <strong>Description: </strong>
@@ -224,15 +270,15 @@ const ProductScreen = () => {
                   </div>
                 </ListGroup.Item>
               </ListGroup>
-            </Col>
-            <Col md={3}>
+              {/* </Col> */}
+              {/* <Col md={3}> */}
               <Card>
                 <ListGroup variant="flush">
                   <ListGroup.Item>
                     <Row>
                       <Col>Price:</Col>
                       <Col>
-                        <strong>${product.price}</strong>
+                        <strong>₹{product.price}</strong>
                       </Col>
                     </Row>
                   </ListGroup.Item>
@@ -348,25 +394,27 @@ const ProductScreen = () => {
           </Row>
 
           {products && (
-            <div className="horizontal-slider">
-              <h2>Related Products</h2>
-              <div className="slider-container">
-                <div className="slider-wrapper" style={{ margin: "0 -10px" }}>
-                  {products.map((product) => (
-                    <Col
-                      key={product._id}
-                      sm={12}
-                      md={6}
-                      lg={4}
-                      xl={3}
-                      style={{ padding: "0 10px" }}
-                    >
-                      <Product product={product} />
-                    </Col>
-                  ))}
+            <Row>
+              <div className="horizontal-slider">
+                <h2>Related Products</h2>
+                <div className="slider-container">
+                  <div className="slider-wrapper" style={{ margin: "0 -10px" }}>
+                    {products.map((product) => (
+                      <Col
+                        key={product._id}
+                        sm={12}
+                        md={6}
+                        lg={4}
+                        xl={3}
+                        style={{ padding: "0 10px" }}
+                      >
+                        <Product product={product} />
+                      </Col>
+                    ))}
+                  </div>
                 </div>
               </div>
-            </div>
+            </Row>
           )}
         </>
       )}
