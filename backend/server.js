@@ -51,7 +51,7 @@ app.use(cors());
 
 app.use(
   cors({
-    origin: [process.env.URL],
+    origin: ["https://ticktocktreasures.onrender.com", "http://localhost:3000"],
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   })
