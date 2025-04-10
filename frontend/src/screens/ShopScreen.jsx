@@ -18,12 +18,11 @@ import {
 } from "../slices/filterApiSlice";
 import { useDispatch, useSelector } from "react-redux";
 import Rating from "../components/widgets/RatingBox";
-import { resetFilters, setfilters } from "../slices/filterSlice";
+import { resetFilters } from "../slices/filterSlice";
 
 const ShopScreen = () => {
   let { pageNumber = 1, keyword = "" } = useParams();
-  // console.log(keyword);
-  // const [appliedKeyword, setAppliedKeyword] = useState(keyword);
+  const navigate = useNavigate(); // Use navigate to update URL parameters
   const [data, setData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [brandOptions, setBrandOptions] = useState([]);
@@ -44,37 +43,49 @@ const ShopScreen = () => {
 
   const filters = useSelector((state) => state.appliedFilters);
 
-  const [filtersAppilied, { isLoading: loadingUpdate }] =
-    useFiltersAppiliedMutation();
+  const [filtersAppilied] = useFiltersAppiliedMutation();
 
   const fetchData = async () => {
     setIsLoading(true);
-    const response = await filtersAppilied({
-      filters: filters,
-      keyword: keyword,
-      pageNumber: pageNumber,
-    });
-    setData(response.data);
-    setError(response.error);
+    try {
+      const response = await filtersAppilied({
+        filters: filters,
+        keyword: keyword,
+        pageNumber: pageNumber,
+      });
+      setData(response.data);
+      setError(null);
+    } catch (err) {
+      setError(err);
+    }
     setIsLoading(false);
   };
 
   const [isOpen, setIsOpen] = useState(false);
+  const [isFilterApplied, setIsFilterApplied] = useState(false);
+
   const toggleDrawer = () => {
     setIsOpen(!isOpen);
   };
 
+  // Fetch data on initial render or when keyword/pageNumber changes
   useEffect(() => {
     fetchData();
-    window.scrollTo(0, 0);
-  }, [keyword, pageNumber, isOpen]);
+  }, [keyword, pageNumber, isFilterApplied]);
 
+  // Apply Filter Button Handler
   const handelApplyFilter = () => {
+    navigate(`/shop/page/1/`); // Update URL with pageNumber=1 and keyword=""
+    setIsFilterApplied(!isFilterApplied);
     setIsOpen(!isOpen);
   };
+
+  // Reset Filter Button Handler
   const handelApplyReset = () => {
-    setIsOpen(!isOpen);
     dispatch(resetFilters());
+    navigate(`/shop/page/1/`); // Reset URL with pageNumber=1 and keyword=""
+    setIsFilterApplied(!isFilterApplied);
+    setIsOpen(!isOpen);
   };
 
   return (
@@ -114,13 +125,14 @@ const ShopScreen = () => {
           </Row>
 
           <Row style={{ marginTop: "25px" }}>
-            <Button onClick={handelApplyFilter}>apply</Button>
+            <Button onClick={handelApplyFilter}>Apply</Button>
           </Row>
           <Row style={{ marginTop: "25px" }}>
             <Button onClick={handelApplyReset}>Reset</Button>
           </Row>
         </Offcanvas.Body>
       </Offcanvas>
+
       <>
         {isLoading ? (
           <Loader />

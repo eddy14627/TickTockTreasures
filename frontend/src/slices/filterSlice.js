@@ -18,27 +18,37 @@ const filterSlice = createSlice({
 
       // Check if the appliedFilters array is empty
       if (state.length === 0) {
-        // If it is empty, just add the new filter
         state.push(newFilter);
       } else {
-        // Otherwise, find the index of the existing filter with the same option
         const existingFilterIndex = state.findIndex((filter) =>
           filter.hasOwnProperty(option)
         );
 
-        // If the existing filter is found, replace it with the new filter
         if (existingFilterIndex !== -1) {
           state[existingFilterIndex] = newFilter;
         } else {
-          // Otherwise, add the new filter to the end of the array
           state.push(newFilter);
         }
       }
+
       localStorage.setItem("appliedFilters", JSON.stringify(state));
+
+      // Change the keyword in the URL to an empty string
+      const url = new URL(window.location.href);
+      // url.search = null; // Set query parameters to an empty string
+      url.pathname = "/shop"; // Set the pathname to "/shop"
+      window.history.pushState(null, "", "/shop");
     },
     resetFilters: (state) => {
       const newState = [];
       localStorage.setItem("appliedFilters", JSON.stringify(newState));
+
+      // Change the keyword in the URL to an empty string
+      const url = new URL(window.location.href);
+
+      url.pathname = "/shop"; // Set the pathname to "/shop"
+      window.history.pushState(null, "", "/shop");
+
       return newState;
     },
   },

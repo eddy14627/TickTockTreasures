@@ -8,7 +8,9 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useLogoutMutation } from "../slices/usersApiSlice";
 import { logout } from "../slices/authSlice";
 import SearchBox from "./SearchBox";
-import logo from "../assets/logo.png";
+// import logo from "../assets/logo.png";
+// import logo from "../assets/rolex.png";
+import logo from "../assets/crown.png";
 import { resetFilters } from "../slices/filterSlice";
 import { clearCartItems, saveCartItems } from "../slices/cartSlice";
 import { useGetCartItemsApiQuery } from "../slices/cartApiSlice";
@@ -75,9 +77,18 @@ const Header = () => {
       <Navbar bg="transparent" variant="light" expand="lg" collapseOnSelect>
         <Container>
           <LinkContainer to="/">
-            <Navbar.Brand className="brand-hover">
-              <img src={logo} alt="TickTockTreasure" />
-              TickTockTreasure
+            <Navbar.Brand
+              className="brand-hover"
+              style={{ display: "flex", alignContent: "center" }}
+            >
+              {/* <img
+                src={logo}
+                alt="TickTockTreasure"
+                style={{ width: "auto", height: "40px", marginRight: "10px" }} // Adjust width and height here
+              /> */}
+              <span style={{ fontSize: "20px", fontWeight: "bold" }}>
+                TickTockTreasure
+              </span>
             </Navbar.Brand>
           </LinkContainer>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
