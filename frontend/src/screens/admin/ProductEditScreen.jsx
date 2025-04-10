@@ -65,6 +65,7 @@ const ProductEditScreen = () => {
       toast.error(err?.data?.message || err.error);
     }
   };
+
   useEffect(() => {
     if (product) {
       setName(product.name);
@@ -168,35 +169,50 @@ const ProductEditScreen = () => {
               />
               {cloudinaryUploadLoading && <Loader />}
             </Form.Group>
+
+            {/* Gender Dropdown */}
             <Form.Group controlId="gender">
               <Form.Label>Gender Type</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Enter gender type"
+              <Form.Select
                 value={gender}
                 onChange={(e) => setGender(e.target.value)}
-              ></Form.Control>
+              >
+                <option value="">Select Gender</option>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+                <option value="unisex">Unisex</option>
+              </Form.Select>
             </Form.Group>
+
+            {/* isWearable Dropdown */}
             <Form.Group controlId="isWearable">
-              <Form.Label>isWearable</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Wearable"
+              <Form.Label>Is Wearable</Form.Label>
+              <Form.Select
                 value={isWearable}
                 onChange={(e) => setIsWearable(e.target.value)}
-              ></Form.Control>
+              >
+                <option value="">Select Wearable Status</option>
+                <option value="yes">Yes</option>
+                <option value="no">No</option>
+              </Form.Select>
             </Form.Group>
 
+            {/* Watch Type Dropdown */}
             <Form.Group controlId="watchType">
               <Form.Label>Watch Type</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Watch Type"
+              <Form.Select
                 value={watchType}
                 onChange={(e) => setWatchType(e.target.value)}
-              ></Form.Control>
+              >
+                <option value="">Select Watch Type</option>
+                <option value="lux">Lux</option>
+                <option value="sports">Sports</option>
+                <option value="smart">Smart</option>
+                <option value="casual">Casual</option>
+              </Form.Select>
             </Form.Group>
 
+            {/* Other Fields */}
             <Form.Group controlId="brand">
               <Form.Label>Brand</Form.Label>
               <Form.Control
@@ -216,6 +232,7 @@ const ProductEditScreen = () => {
                 onChange={(e) => setCountInStock(e.target.value)}
               ></Form.Control>
             </Form.Group>
+
             <Form.Group controlId="description">
               <Form.Label>Description</Form.Label>
               <Form.Control
@@ -226,6 +243,7 @@ const ProductEditScreen = () => {
               ></Form.Control>
             </Form.Group>
 
+            {/* Submit Button */}
             <Button
               type="submit"
               variant="primary"

@@ -8,13 +8,20 @@ import CheckoutSteps from "../components/CheckoutSteps";
 import Loader from "../components/Loader";
 import { useCreateOrderMutation } from "../slices/ordersApiSlice";
 import { clearCartItems } from "../slices/cartSlice";
+import { useClearCartMutation } from "../slices/cartApiSlice";
+// import { clearCart } from "../../../backend/controllers/cartController";
 
 const PlaceOrderScreen = () => {
   const navigate = useNavigate();
+  const { userInfo } = useSelector((state) => state.auth);
+  const user = userInfo._id;
+  console.log(userInfo);
+  console.log(user);
 
   const cart = useSelector((state) => state.cart);
 
   const [createOrder, { isLoading }] = useCreateOrderMutation();
+  const [clearCart] = useClearCartMutation();
 
   useEffect(() => {
     if (!cart.shippingAddress.address) {
@@ -36,8 +43,13 @@ const PlaceOrderScreen = () => {
         taxPrice: cart.taxPrice,
         totalPrice: cart.totalPrice,
       }).unwrap();
-      dispatch(clearCartItems());
-      navigate(`/order/${res._id}`);
+      const response = await clearCart({
+        userId: user,
+      }).unwrap();
+      if (response) {
+        dispatch(clearCartItems());
+        navigate(`/order/${res._id}`);
+      }
     } catch (err) {
       toast.error(err);
     }
@@ -88,7 +100,8 @@ const PlaceOrderScreen = () => {
                           </Link>
                         </Col>
                         <Col md={4}>
-                          {item.qty} x ${item.price} = ${item.qty * item.price}
+                          {item.qty} x ₹ {item.price} = ₹{" "}
+                          {item.qty * item.price}
                         </Col>
                       </Row>
                     </ListGroup.Item>
@@ -107,25 +120,25 @@ const PlaceOrderScreen = () => {
               <ListGroup.Item>
                 <Row>
                   <Col>Items</Col>
-                  <Col>${cart.itemsPrice}</Col>
+                  <Col>₹ {cart.itemsPrice}</Col>
                 </Row>
               </ListGroup.Item>
               <ListGroup.Item>
                 <Row>
                   <Col>Shipping</Col>
-                  <Col>${cart.shippingPrice}</Col>
+                  <Col>₹ {cart.shippingPrice}</Col>
                 </Row>
               </ListGroup.Item>
               <ListGroup.Item>
                 <Row>
                   <Col>Tax</Col>
-                  <Col>${cart.taxPrice}</Col>
+                  <Col>₹ {cart.taxPrice}</Col>
                 </Row>
               </ListGroup.Item>
               <ListGroup.Item>
                 <Row>
                   <Col>Total</Col>
-                  <Col>${cart.totalPrice}</Col>
+                  <Col>₹ {cart.totalPrice}</Col>
                 </Row>
               </ListGroup.Item>
               {/* <ListGroup.Item>

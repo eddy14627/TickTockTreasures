@@ -8,6 +8,7 @@ import Message from "../components/widgets/Message";
 import ProductCarousel from "../components/ProductCarousel";
 import Meta from "../components/Meta";
 import OfferComponent from "../components/OfferBanner"; // Import OfferComponent
+import CollectionHeader from "../components/widgets/CollectionHeader"; // Import CollectionHeader
 
 const HomeScreen = () => {
   const { pageNumber, keyword } = useParams();
@@ -78,7 +79,7 @@ const HomeScreen = () => {
 
           {/* Render Product Rows */}
           <ProductRow
-            title="Latest Arrivals"
+            title={<CollectionHeader title="Latest Arrivals" />}
             products={latest}
             category="latest"
             scrollRef={scrollRef}
@@ -86,7 +87,7 @@ const HomeScreen = () => {
             scrollRight={scrollRight}
           />
           <ProductRow
-            title="Luxury Collection"
+            title={<CollectionHeader title="Luxury Collection" />}
             products={luxuryWatches}
             category="luxury"
             scrollRef={scrollRef}
@@ -94,7 +95,7 @@ const HomeScreen = () => {
             scrollRight={scrollRight}
           />
           <ProductRow
-            title="Smart Watches"
+            title={<CollectionHeader title="Smart Watches" />}
             products={smartWatches}
             category="smart"
             scrollRef={scrollRef}
@@ -102,7 +103,7 @@ const HomeScreen = () => {
             scrollRight={scrollRight}
           />
           <ProductRow
-            title="Casual Styles"
+            title={<CollectionHeader title="Casual Styles" />}
             products={casualWatches}
             category="casual"
             scrollRef={scrollRef}
@@ -110,7 +111,7 @@ const HomeScreen = () => {
             scrollRight={scrollRight}
           />
           <ProductRow
-            title="Sports Editions"
+            title={<CollectionHeader title="Sports Editions" />}
             products={sportsWatches}
             category="sports"
             scrollRef={scrollRef}
@@ -118,7 +119,7 @@ const HomeScreen = () => {
             scrollRight={scrollRight}
           />
           <ProductRow
-            title="Best Sellers"
+            title={<CollectionHeader title="Best Sellers" />}
             products={bestSeller}
             category="bestseller"
             scrollRef={scrollRef}
@@ -141,7 +142,7 @@ const ProductRow = ({
 }) => {
   return (
     <div className="product-row">
-      <h2>{title}</h2>
+      {title} {/* Render dynamic header */}
       <div className="slider-container">
         {/* Left Arrow */}
         <button className="arrow-btn left" onClick={() => scrollLeft(category)}>

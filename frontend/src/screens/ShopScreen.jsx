@@ -66,6 +66,7 @@ const ShopScreen = () => {
 
   useEffect(() => {
     fetchData();
+    window.scrollTo(0, 0);
   }, [keyword, pageNumber, isOpen]);
 
   const handelApplyFilter = () => {

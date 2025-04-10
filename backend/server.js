@@ -13,6 +13,7 @@ import filtersRoutes from "./routes/filtersRoutes.js";
 import { notFound, errorHandler } from "./middleware/errorMiddleware.js";
 import forgetRoutes from "./routes/PasswordChangeRoute.js";
 import cloudinaryUpload from "./routes/CloudinaryRoutes.js";
+import { corsOptions } from "./utils/additinalFunctions.js";
 
 const port = process.env.PORT || 5000;
 
@@ -38,11 +39,7 @@ app.use(cookieParser());
 /*
 Purpose: Enable CORS with specific options to allow external resources.
 */
-const corsOptions = {
-  origin: "*", // Replace '*' with your frontend domain if needed
-  methods: ["GET", "POST", "PUT", "DELETE"],
-  allowedHeaders: ["Content-Type", "Authorization"],
-};
+
 app.use(cors(corsOptions));
 
 /*

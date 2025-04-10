@@ -8,6 +8,7 @@ import { logout } from "./slices/authSlice";
 
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import ScrollToTop from "./components/widgets/ScrollToTop";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -25,6 +26,7 @@ const App = () => {
 
   return (
     <>
+      <ScrollToTop />
       <ToastContainer />
       <Header />
       <main className="py-3">

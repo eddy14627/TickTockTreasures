@@ -60,7 +60,7 @@ const Product = ({ product }) => {
               color: "#888",
             }}
           >
-            ₹{product.originalPrice}
+            {product.originalPrice}
           </span>
         </Card.Text>
 
