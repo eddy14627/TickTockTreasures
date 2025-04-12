@@ -46,8 +46,7 @@ app.use(cors(corsOptions));
 Purpose: Adjust COEP headers to avoid blocking external resources.
 */
 app.use((req, res, next) => {
-  res.setHeader("Cross-Origin-Opener-Policy", "same-origin"); // Optional
-  res.setHeader("Cross-Origin-Embedder-Policy", "credentialless"); // Less restrictive
+  res.setHeader("Cross-Origin-Opener-Policy", "same-origin-allow-popups");
   next();
 });
 
